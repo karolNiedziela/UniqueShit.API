@@ -4,7 +4,7 @@ using UniqueShit.Application.Core.Messaging;
 using UniqueShit.Domain.Enitities;
 using UniqueShit.Domain.Enumerations;
 
-namespace UniqueShit.Application.Features.OfferFilters.GetFilters
+namespace UniqueShit.Application.Features.Offers.Queries.GetFilters
 {
     internal sealed class GetOffersFiltersQueryHandler : IQueryHandler<GetOfferFiltersQuery, OfferFiltersResponse>
     {

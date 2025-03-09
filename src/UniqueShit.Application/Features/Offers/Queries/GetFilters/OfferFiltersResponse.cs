@@ -1,7 +1,7 @@
 ﻿using UniqueShit.Domain.Enitities;
 using UniqueShit.Domain.Enumerations;
 
-namespace UniqueShit.Application.Features.OfferFilters.GetFilters
+namespace UniqueShit.Application.Features.Offers.Queries.GetFilters
 {
     public sealed class OfferFiltersResponse
     {

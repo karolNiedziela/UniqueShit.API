@@ -13,7 +13,7 @@ namespace UniqueShit.Domain.Offers
 
         public int Quantity { get; private set; }
 
-        public Money Price { get; private set; }
+        public Money Price { get; private set; } = default!;
 
         public DateTime CreatedOnUtc { get; } = DateTime.UtcNow;
 

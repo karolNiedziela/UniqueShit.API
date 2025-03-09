@@ -33,5 +33,9 @@
         public static implicit operator Result(Error error) => new(error);
 
         public static implicit operator Result(List<Error> errors) => new(errors);
+
+        public static Result<TValue> Create<TValue>(TValue value, Error error)
+            where TValue : class
+            => value is null ? error : value;
     }
 }

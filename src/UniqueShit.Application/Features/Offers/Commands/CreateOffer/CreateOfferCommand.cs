@@ -1,11 +1,13 @@
 ﻿using UniqueShit.Application.Core.Messaging;
+using UniqueShit.Application.Features.Common;
+using UniqueShit.Domain.Core.Primitives.Results;
 
-namespace UniqueShit.Application.Features.Offers.CreateOffer
+namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
 {
     public sealed record CreateOfferCommand(
         string Topic,
         string Description,
-        MoneyModel Price,
+        MoneyRequest Price,
         int ItemConditionId,
         int ColourId,
         int ProductCategoryId,
@@ -13,7 +15,7 @@ namespace UniqueShit.Application.Features.Offers.CreateOffer
         int ModelId,
         int OfferTypeId,
         int Quantity = 1)
-        : ICommand<int>;
-
-    public record MoneyModel(decimal Amount, string Currency);
+        : ICommand<Result<int>>;
 }
+
+

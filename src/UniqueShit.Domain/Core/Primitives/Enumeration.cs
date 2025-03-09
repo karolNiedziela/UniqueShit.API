@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using UniqueShit.Domain.Core.Primitives.Results;
 
 namespace UniqueShit.Domain.Core.Primitives
 {
@@ -19,16 +20,23 @@ namespace UniqueShit.Domain.Core.Primitives
 
         public static IReadOnlyCollection<TEnum> List => [.. Enumerations.Values];
 
-        public static TEnum? FromValue(int id)
+        public static Result<TEnum> FromValue(int id)
         {
-            return Enumerations.TryGetValue(id, out TEnum? enumeration) ? enumeration : default;
+            return Enumerations.TryGetValue(id, out TEnum? enumeration) ? enumeration : new Error($"{typeof(TEnum).Name}.NotFound", "Value with given id does not exist.");
         }
 
-        public static TEnum? FromName(string name)
+        public static Result<TEnum> FromName(string name)
         {
-            return Enumerations
+            var enumeration = Enumerations
                 .Values
-                .SingleOrDefault(e => e.Name == name);
+                .FirstOrDefault(e => e.Name == name);
+
+            if (enumeration == null)
+            {
+                return new Error($"{typeof(TEnum).Name}.NotFound", "Value with given name does not exist.");
+            }
+
+            return enumeration;
         }
         public bool Equals(Enumeration<TEnum>? x, Enumeration<TEnum>? y)
         {

@@ -26,5 +26,12 @@ namespace UniqueShit.Domain.Core.Errors
 
             public static Error InvalidCurrency => new("Money.InvalidCurrency", "This currency is not supported.");
         }
+
+        public static class Offer
+        {
+            public static Error SizeNotFound => new("Offer.SizeNotFound", "Size with the specified identifier was not found.");
+
+            public static Error ModelNotFound => new("Offer.ModelNotFound", "Model with the specified identifier was not found.");
+        }
     }
 }
