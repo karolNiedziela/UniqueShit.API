@@ -1,0 +1,6 @@
+@UniqueShit.Api_HostAddress = http://localhost:5058
+
+GET {{UniqueShit.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

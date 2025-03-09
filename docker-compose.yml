@@ -1,0 +1,27 @@
+name: uniqueshit
+version: '3.9'
+
+services:
+  uniqueshit.api:
+    container_name: UniqueShit_API
+    image: ${DOCKER_REGISTRY-}uniqueshitapi
+    depends_on:
+      - uniquestshit.mssql-db
+    build:
+      context: .
+      dockerfile: src/UniqueShit.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+
+  uniquestshit.mssql-db:
+    container_name: UniqueSshit_MSSQL_DB
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_PASSWORD}
+    volumes:
+      - .datamssql/data:/var/opt/mssql/data
+      - .datamssql/log:/var/opt/mssql/log
+      - .datamssql/secrets:/var/opt/mssql/secrets
