@@ -29,7 +29,7 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
                 .IsRequired();
             });
 
-            builder.ComplexProperty(x => x.Price, priceBuilder =>
+            builder.OwnsOne(x => x.Price, priceBuilder =>
             {
                 priceBuilder.Property(x => x.Amount)
                 .HasColumnType("decimal(6,2)")
@@ -55,10 +55,28 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
                 .HasForeignKey(x => x.SizeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne<Model>()
+            builder.HasOne<ProductCategory>()
                 .WithMany()
-                .HasForeignKey(x => x.ModelId)
+                .HasForeignKey(x => x.ProductCategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne<OfferState>()
+                .WithMany()
+                .HasForeignKey(x => x.OfferStateId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(x => x.Colours)
+             .WithMany()
+              .UsingEntity(
+                 "OfferColour",
+                 l => l.HasOne(typeof(Colour)).WithMany().HasForeignKey("ColourId").HasPrincipalKey(nameof(Colour.Id)),
+                 r => r.HasOne(typeof(Offer)).WithMany().HasForeignKey("OfferId").HasPrincipalKey(nameof(Offer.Id)),
+                 j => j.HasKey("ColourId", "OfferId"));
         }
     }
 }

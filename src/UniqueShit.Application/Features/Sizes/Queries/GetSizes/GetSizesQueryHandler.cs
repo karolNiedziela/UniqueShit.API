@@ -17,12 +17,9 @@ namespace UniqueShit.Application.Features.Sizes.Queries.GetSizes
         public async Task<List<GetSizesResponse>> Handle(GetSizesQuery request, CancellationToken cancellationToken)
         {
             var sizes = await _dbContext.Set<Size>()
+                .AsNoTracking()
                 .Where(s => s.ProductCategoryId == request.ProductCategoryId)
-                .Select(s => new GetSizesResponse
-                {
-                    Id = s.Id,
-                    Value = s.Value
-                })
+                .Select(s => new GetSizesResponse(s.Id, s.Value))
                 .ToListAsync(cancellationToken);
 
             return sizes;

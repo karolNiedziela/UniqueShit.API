@@ -134,22 +134,23 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     Topic = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpiredAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OfferTypeId = table.Column<int>(type: "int", nullable: false),
                     ItemConditionId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
-                    ModelId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false)
+                    ManufacturerId = table.Column<int>(type: "int", nullable: false),
+                    ProductCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Offer", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Offer_Model_ModelId",
-                        column: x => x.ModelId,
-                        principalTable: "Model",
+                        name: "FK_Offer_Manufacturer_ManufacturerId",
+                        column: x => x.ManufacturerId,
+                        principalTable: "Manufacturer",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Offer_OfferType_OfferTypeId",
@@ -157,10 +158,39 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         principalTable: "OfferType",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Offer_ProductCategory_ProductCategoryId",
+                        column: x => x.ProductCategoryId,
+                        principalTable: "ProductCategory",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Offer_Size_SizeId",
                         column: x => x.SizeId,
                         principalTable: "Size",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OfferColour",
+                columns: table => new
+                {
+                    ColourId = table.Column<int>(type: "int", nullable: false),
+                    OfferId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OfferColour", x => new { x.ColourId, x.OfferId });
+                    table.ForeignKey(
+                        name: "FK_OfferColour_Colour_ColourId",
+                        column: x => x.ColourId,
+                        principalTable: "Colour",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OfferColour_Offer_OfferId",
+                        column: x => x.OfferId,
+                        principalTable: "Offer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -221,9 +251,9 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                 column: "ProductCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offer_ModelId",
+                name: "IX_Offer_ManufacturerId",
                 table: "Offer",
-                column: "ModelId");
+                column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Offer_OfferTypeId",
@@ -231,9 +261,19 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                 column: "OfferTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Offer_ProductCategoryId",
+                table: "Offer",
+                column: "ProductCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Offer_SizeId",
                 table: "Offer",
                 column: "SizeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OfferColour_OfferId",
+                table: "OfferColour",
+                column: "OfferId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Size_ProductCategoryId",
@@ -245,25 +285,28 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Colour");
+                name: "ItemCondition");
 
             migrationBuilder.DropTable(
-                name: "ItemCondition");
+                name: "Model");
+
+            migrationBuilder.DropTable(
+                name: "OfferColour");
+
+            migrationBuilder.DropTable(
+                name: "Colour");
 
             migrationBuilder.DropTable(
                 name: "Offer");
 
             migrationBuilder.DropTable(
-                name: "Model");
+                name: "Manufacturer");
 
             migrationBuilder.DropTable(
                 name: "OfferType");
 
             migrationBuilder.DropTable(
                 name: "Size");
-
-            migrationBuilder.DropTable(
-                name: "Manufacturer");
 
             migrationBuilder.DropTable(
                 name: "ProductCategory");

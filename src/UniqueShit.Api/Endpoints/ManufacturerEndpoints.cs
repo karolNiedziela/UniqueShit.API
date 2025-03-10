@@ -3,31 +3,30 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Queries;
-using UniqueShit.Application.Features.Models.Queries.GetModels;
+using UniqueShit.Application.Features.Manufacturers.Queries;
 
 namespace UniqueShit.Api.Endpoints
 {
-    internal sealed class ModelEndpoints : IMinimalApiEndpointDefinition
+    internal sealed class ManufacturerEndpoints : IMinimalApiEndpointDefinition
     {
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder builder)
         {
-            var group = builder.MapGroup("models");
+            var group = builder.MapGroup("manufacturers");
 
-            group.MapGet("", GetModels)
-                .WithName(nameof(GetModels))
+            group.MapGet("", GetManufacturers)
+                .WithName(nameof(GetManufacturers))
                 .WithMetadata(
-                    new SwaggerOperationAttribute(summary: "Get models"),
+                    new SwaggerOperationAttribute(summary: "Get manufacturers"),
                     new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
             return builder;
         }
 
-        public static async Task<Ok<PagedList<GetModelsResponse>>> GetModels(int productCategoryId,
-            int manufacturerId,
+        public static async Task<Ok<PagedList<GetManufacturersResponse>>> GetManufacturers(
             string? searchTerm,
             ISender sender)
         {
-            var query = new GetModelsQuery(productCategoryId, manufacturerId, searchTerm);
+            var query = new GetManufacturersQuery(searchTerm);
 
             var models = await sender.Send(query);
 

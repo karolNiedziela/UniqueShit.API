@@ -8,12 +8,12 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
         string Topic,
         string Description,
         MoneyRequest Price,
-        int ItemConditionId,
-        int ColourId,
-        int ProductCategoryId,
-        int SizeId,
-        int ModelId,
         int OfferTypeId,
+        int ItemConditionId,
+        int ProductCategoryId,
+        int ManufacturerId,
+        int SizeId,
+        List<int> ColourIds,
         int Quantity = 1)
         : ICommand<Result<int>>;
 }

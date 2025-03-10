@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Swashbuckle.AspNetCore.Annotations;
+using UniqueShit.Application.Core.Queries;
 using UniqueShit.Application.Features.Offers.Commands.CreateOffer;
 using UniqueShit.Application.Features.Offers.Queries.GetFilters;
+using UniqueShit.Application.Features.Offers.Queries.GetOffers;
 using UniqueShit.Domain.Core.Primitives;
 
 namespace UniqueShit.Api.Endpoints
@@ -22,6 +24,12 @@ namespace UniqueShit.Api.Endpoints
                  new SwaggerOperationAttribute(summary: "Get offer"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK),
                  new ProducesResponseTypeAttribute(StatusCodes.Status404NotFound));
+
+            group.MapGet("", GetOffers)
+                .WithName(nameof(GetOffers))
+                .WithMetadata(
+                 new SwaggerOperationAttribute(summary: "Get offers"),
+                 new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
             group.MapGet("filters", GetOfferFilters)
                 .WithName(nameof(GetOfferFilters))
@@ -42,6 +50,21 @@ namespace UniqueShit.Api.Endpoints
         public static async Task<Results<Ok, NotFound>> GetOffer(Guid offerId, ISender sender, HttpContext context)
         {
             return TypedResults.Ok();
+        }
+
+        public static async Task<Ok<PagedList<GetOffersResponse>>> GetOffers(
+            int offerTypeId,
+            int pageNumber,
+            int pageSize,
+            int? itemConditionId,
+            int? sizeId,
+            int? manufacturerId,
+            int? productCategoryId,
+            ISender sender)
+        {
+            var offers = await sender.Send(new GetOffersQuery(offerTypeId, pageNumber, pageSize, itemConditionId, sizeId, manufacturerId, productCategoryId));
+
+            return TypedResults.Ok(offers);
         }
 
         public static async Task<Ok<OfferFiltersResponse>> GetOfferFilters(ISender sender)

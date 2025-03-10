@@ -1,5 +1,4 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
-using UniqueShit.Domain.Enumerations;
 
 namespace UniqueShit.Domain.Enitities
 {
@@ -11,8 +10,10 @@ namespace UniqueShit.Domain.Enitities
 
         public int ManufacturerId { get; private set; }
 
+        public Manufacturer Manufacturer { get; private set; } = default!;
+
         private Model()
-        {            
+        {
         }
 
         public Model(string name, int productCategoryId, int manufacturerId)

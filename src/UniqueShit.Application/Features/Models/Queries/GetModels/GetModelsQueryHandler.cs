@@ -20,6 +20,7 @@ namespace UniqueShit.Application.Features.Models.Queries.GetModels
         public async Task<PagedList<GetModelsResponse>> Handle(GetModelsQuery request, CancellationToken cancellationToken)
         {
             var modelsQuery = _dbContext.Set<Model>()
+                .AsNoTracking()
                 .Where(m => m.ProductCategoryId == request.ProductCategoryId)
                 .Where(m => m.ManufacturerId == request.ManufacturerId)
                 .AsQueryable();
@@ -31,11 +32,7 @@ namespace UniqueShit.Application.Features.Models.Queries.GetModels
 
             var models = await modelsQuery
                 .OrderBy(x => x.Name)
-                .Select(m => new GetModelsResponse
-                {
-                    Id = m.Id,
-                    Name = m.Name
-                })
+                .Select(m => new GetModelsResponse(m.Id, m.Name))
                 .PaginateAsync(PagedBase.DefaultPageNumber, PagedBase.DefaultPageSize, cancellationToken);
                 
 

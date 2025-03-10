@@ -16,5 +16,8 @@ namespace UniqueShit.Infrastructure.Persistence.Repositories
 
         public void Add(Offer offer)
             => _offers.Add(offer);
+
+        public void Update(Offer offer)
+            => _offers.Update(offer);
     }
 }

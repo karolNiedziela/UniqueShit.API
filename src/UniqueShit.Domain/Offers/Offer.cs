@@ -1,4 +1,6 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
+using UniqueShit.Domain.Enitities;
+using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers.ValueObjects;
 
 namespace UniqueShit.Domain.Offers
@@ -17,7 +19,7 @@ namespace UniqueShit.Domain.Offers
 
         public DateTime CreatedOnUtc { get; } = DateTime.UtcNow;
 
-        public DateTime? ExpiredAtUtc { get; private set; } = DateTime.Now.AddDays(DefaultPeriodOfOfferValidityInDays);
+        public DateTime? ExpiredAtUtc { get; private set; } = DateTime.UtcNow.AddDays(DefaultPeriodOfOfferValidityInDays);
 
         public int OfferTypeId { get; private set; }
 
@@ -25,8 +27,15 @@ namespace UniqueShit.Domain.Offers
 
         public int SizeId { get; private set; }
 
-        public int ModelId { get; private set; }
+        public int ManufacturerId { get; private set; }
 
+        public int ProductCategoryId { get; private set; }
+
+        public int OfferStateId { get; private set; }
+
+        public Manufacturer Manufacturer { get; private set; } = default!;
+
+        public List<Colour> Colours { get; private set; } = [];
 
         private Offer() { }
 
@@ -34,10 +43,11 @@ namespace UniqueShit.Domain.Offers
             Topic topic,
             Description description,
             Money price,
+            int offerTypeId,
             int itemConditionId,
             int sizeId,
-            int modelId,
-            int offerTypeId,
+            int productCategoryId,
+            int manufacturerId,
             int quantity = 1)
         {
             Topic = topic;
@@ -47,7 +57,9 @@ namespace UniqueShit.Domain.Offers
             Quantity = quantity;
             OfferTypeId = offerTypeId;
             SizeId = sizeId;
-            ModelId = modelId;
+            ProductCategoryId = productCategoryId;
+            ManufacturerId = manufacturerId;
+            OfferStateId = OfferState.Active.Id;
         }
 
         public static Offer CreatePurchaseOffer(
@@ -56,16 +68,18 @@ namespace UniqueShit.Domain.Offers
             Money price,
             int itemConditionId,
             int sizeId,
-            int modelId,
+            int productCategoryId,
+            int manufacturerId,
             int quantity = 1)
             => new(
                 topic: topic,
                 description: description,
                 price: price,
+                offerTypeId: OfferType.Purchase.Id,
                 itemConditionId: itemConditionId,
                 sizeId: sizeId,
-                modelId: modelId,
-                offerTypeId: Enumerations.OfferType.Purchase.Id,
+                productCategoryId: productCategoryId,
+                manufacturerId: manufacturerId,
                 quantity: quantity);
 
         public static Offer CreateSaleOffer(
@@ -74,16 +88,21 @@ namespace UniqueShit.Domain.Offers
             Money price,
             int itemConditionId,
             int sizeId,
-            int modelId,
+            int productCategoryId,
+            int manufacturerId,
             int quantity = 1)
             => new(
                 topic: topic,
                 description: description,
                 price: price,
+                offerTypeId: OfferType.Sale.Id,
                 itemConditionId: itemConditionId,
                 sizeId: sizeId,
-                modelId: modelId,
-                offerTypeId: Enumerations.OfferType.Sale.Id,
+                productCategoryId: productCategoryId,
+                manufacturerId: manufacturerId,
                 quantity: quantity);
+
+        public void AddColours(List<Colour> colours)
+            => Colours.AddRange(colours);
     }
 }

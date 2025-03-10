@@ -2,7 +2,6 @@
 {
     public sealed class PagedList<T> : PagedBase
     {
-
         public IReadOnlyCollection<T> Items { get; }
 
 
@@ -11,5 +10,8 @@
         {
             Items = items.ToList();
         }
+
+        public static PagedList<T> Empty() 
+            => new([], DefaultPageNumber, DefaultPageSize, 0);
     }
 }
