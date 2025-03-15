@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Queries;
 using UniqueShit.Application.Features.Offers.Commands.CreateOffer;
