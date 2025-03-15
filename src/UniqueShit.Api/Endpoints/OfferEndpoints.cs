@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Routing;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Queries;
 using UniqueShit.Application.Features.Offers.Commands.CreateOffer;
+using UniqueShit.Application.Features.Offers.Contracts.Responses;
 using UniqueShit.Application.Features.Offers.Queries.GetFilters;
+using UniqueShit.Application.Features.Offers.Queries.GetOffer;
 using UniqueShit.Application.Features.Offers.Queries.GetOffers;
 using UniqueShit.Domain.Core.Primitives;
 
@@ -47,9 +49,15 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Results<Ok, NotFound>> GetOffer(Guid offerId, ISender sender, HttpContext context)
+        public static async Task<Results<Ok<GetOfferResponse>, NotFound>> GetOffer(int offerId, ISender sender, HttpContext context)
         {
-            return TypedResults.Ok();
+            var offer = await sender.Send(new GetOfferQuery(offerId));
+            if (offer is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Ok(offer);
         }
 
         public static async Task<Ok<PagedList<GetOffersResponse>>> GetOffers(

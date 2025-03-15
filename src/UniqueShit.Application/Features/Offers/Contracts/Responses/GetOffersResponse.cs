@@ -1,6 +1,6 @@
-﻿using UniqueShit.Domain.Enumerations;
+﻿using UniqueShit.Application.Core.Responses;
 
-namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
+namespace UniqueShit.Application.Features.Offers.Contracts.Responses
 {
     public sealed class GetOffersResponse
     {
@@ -8,7 +8,7 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 
         public required string Topic { get; set; }
 
-        public required ManufacturerResponse Manufacturer { get; set; }
+        public required OfferManufacturerResponse Manufacturer { get; set; }
 
         public required MoneyResponse Price { get; set; }
 
@@ -18,11 +18,4 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 
         public required int Quantity { get; set; }
     }
-
-    public sealed record ManufacturerResponse(int Id, string Name);
-
-    public sealed record MoneyResponse(decimal Value, string Currency);
-
-    public sealed record EnumerationResponse(int id, string name);
-
 }

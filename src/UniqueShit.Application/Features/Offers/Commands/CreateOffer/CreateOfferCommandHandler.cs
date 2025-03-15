@@ -30,26 +30,10 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
 
         public async Task<Result<int>> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
         {
-            var colourResults = request.ColourIds.Select(Colour.FromValue).ToList();
-            var itemCondition = ItemCondition.FromValue(request.ItemConditionId);
-            var offerType = OfferType.FromValue(request.OfferTypeId);
-            var productCategory = ProductCategory.FromValue(request.ProductCategoryId);
-
-            var enumerationsValidationResult = Result.Success()
-                .AggregateErrors(colourResults[0], itemCondition, offerType, productCategory);
-            if (enumerationsValidationResult.IsFailure)
+            var validationResult = ValidateRequest(request);
+            if (validationResult.IsFailure)
             {
-                return enumerationsValidationResult.Errors;
-            }
-
-            var topic = Topic.Create(request.Topic);
-            var description = Description.Create(request.Description);
-            var price = Money.Create(request.Price.Amount, request.Price.Currency);
-
-            var valueObjectsValidationResult = Result.Success().AggregateErrors(topic, description, price);
-            if (valueObjectsValidationResult.IsFailure)
-            {
-                return valueObjectsValidationResult.Errors;
+                return validationResult.Errors;
             }
 
             var manufacturer = await _manufacturerRepository.GetAsync(request.ManufacturerId);
@@ -64,23 +48,58 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
                 return DomainErrors.Offer.SizeNotFound;
             }
 
-            var colours = colourResults.Select(x => x.Value).ToList();
-
-            var offer = offerType.Value.Id == OfferType.Purchase.Id ?
-                Offer.CreatePurchaseOffer(topic.Value, description.Value, price.Value, itemCondition.Value.Id, size.Id, productCategory.Value.Id, manufacturer.Id, request.Quantity) :
-                Offer.CreateSaleOffer(topic.Value, description.Value, price.Value, itemCondition.Value.Id, size.Id, productCategory.Value.Id, manufacturer.Id, request.Quantity);
-
+            var offer = CreateOffer(request, manufacturer.Id, size.Id);
             _offerRepository.Add(offer);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            offer.AddColours(colours);
-
+            offer.AddColours(request.ColourIds.Select(Colour.FromValue).Select(x => x.Value).ToList());
             _offerRepository.Update(offer);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return offer.Id;
+        }
+
+        private Result ValidateRequest(CreateOfferCommand request)
+        {
+            var colourResults = request.ColourIds.Select(Colour.FromValue).ToList();
+            var itemCondition = ItemCondition.FromValue(request.ItemConditionId);
+            var offerType = OfferType.FromValue(request.OfferTypeId);
+            var productCategory = ProductCategory.FromValue(request.ProductCategoryId);
+
+            var enumerationsValidationResult = Result.Success()
+                .AggregateErrors(colourResults[0], itemCondition, offerType, productCategory);
+            if (enumerationsValidationResult.IsFailure)
+            {
+                return enumerationsValidationResult;
+            }
+
+            var topic = Topic.Create(request.Topic);
+            var description = Description.Create(request.Description);
+            var price = Money.Create(request.Price.Amount, request.Price.Currency);
+
+            var valueObjectsValidationResult = Result.Success().AggregateErrors(topic, description, price);
+            if (valueObjectsValidationResult.IsFailure)
+            {
+                return valueObjectsValidationResult;
+            }
+
+            return Result.Success();
+        }
+
+        private Offer CreateOffer(CreateOfferCommand request, int manufacturerId, int sizeId)
+        {
+            var topic = Topic.Create(request.Topic).Value;
+            var description = Description.Create(request.Description).Value;
+            var price = Money.Create(request.Price.Amount, request.Price.Currency).Value;
+            var itemConditionId = ItemCondition.FromValue(request.ItemConditionId).Value.Id;
+            var productCategoryId = ProductCategory.FromValue(request.ProductCategoryId).Value.Id;
+            var offerTypeId = OfferType.FromValue(request.OfferTypeId).Value.Id;
+
+            return offerTypeId == OfferType.Purchase.Id
+                ? Offer.CreatePurchaseOffer(topic, description, price, itemConditionId, sizeId, productCategoryId, manufacturerId, request.Quantity)
+                : Offer.CreateSaleOffer(topic, description, price, itemConditionId, sizeId, productCategoryId, manufacturerId, request.Quantity);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -17,7 +16,8 @@ namespace UniqueShit.Api.Endpoints
                 .WithName(nameof(GetSizes))
                 .WithMetadata(
                     new SwaggerOperationAttribute(summary: "Get sizes"),
-                    new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
+                    new ProducesResponseTypeAttribute(StatusCodes.Status200OK))
+                .RequireAuthorization();
 
             return builder;
         }

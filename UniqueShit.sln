@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueShit.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueShit.Application", "src\UniqueShit.Application\UniqueShit.Application.csproj", "{C5F0C131-28EF-4E3B-943F-22E103467803}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{61EC36BE-C753-489C-9E97-1065B3A1DCCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueShit.Domain.UnitTests", "tests\UniqueShit.Domain.UnitTests\UniqueShit.Domain.UnitTests.csproj", "{F3B3713E-C798-474C-9692-4C62F81C0024}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,10 @@ Global
 		{C5F0C131-28EF-4E3B-943F-22E103467803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5F0C131-28EF-4E3B-943F-22E103467803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5F0C131-28EF-4E3B-943F-22E103467803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3B3713E-C798-474C-9692-4C62F81C0024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3B3713E-C798-474C-9692-4C62F81C0024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3B3713E-C798-474C-9692-4C62F81C0024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3B3713E-C798-474C-9692-4C62F81C0024}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,5 +65,6 @@ Global
 		{3EB056CD-C938-42BA-9858-877020E85AE3} = {0F74F3AA-C1F9-4D9E-A468-423E16831795}
 		{8B9D2BF9-DD4F-450A-9326-A881155721AE} = {0F74F3AA-C1F9-4D9E-A468-423E16831795}
 		{C5F0C131-28EF-4E3B-943F-22E103467803} = {0F74F3AA-C1F9-4D9E-A468-423E16831795}
+		{F3B3713E-C798-474C-9692-4C62F81C0024} = {61EC36BE-C753-489C-9E97-1065B3A1DCCF}
 	EndGlobalSection
 EndGlobal

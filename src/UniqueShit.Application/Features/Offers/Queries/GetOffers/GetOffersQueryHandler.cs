@@ -3,6 +3,8 @@ using UniqueShit.Application.Core.Extensions;
 using UniqueShit.Application.Core.Messaging;
 using UniqueShit.Application.Core.Persistence;
 using UniqueShit.Application.Core.Queries;
+using UniqueShit.Application.Core.Responses;
+using UniqueShit.Application.Features.Offers.Contracts.Responses;
 using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
 
@@ -63,7 +65,7 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
                 {
                     Id = x.Id,
                     Topic = x.Topic.Value,
-                    Manufacturer = new ManufacturerResponse(x.Manufacturer.Id, x.Manufacturer.Name),
+                    Manufacturer = new OfferManufacturerResponse(x.Manufacturer.Id, x.Manufacturer.Name),
                     Price = new MoneyResponse(x.Price.Amount, x.Price.Currency),
                     ItemCondition = new EnumerationResponse(x.ItemConditionId, ItemCondition.FromValue(x.ItemConditionId).Value.Name),
                     Colours = x.Colours.Select(c => new EnumerationResponse(c.Id, c.Name)).ToList(),
