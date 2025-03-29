@@ -27,15 +27,15 @@ namespace UniqueShit.Domain.Offers
 
         public int SizeId { get; private set; }
 
-        public int ManufacturerId { get; private set; }
+        public int ModelId { get; private set; }
 
-        public int ProductCategoryId { get; private set; }
+        public Model Model { get; private set; } = default!;
 
         public int OfferStateId { get; private set; }
 
-        public Manufacturer Manufacturer { get; private set; } = default!;
+        public Guid AppUserId { get; private set; }
 
-        public List<Colour> Colours { get; private set; } = [];
+        public AppUser AppUser { get; private set; } = default!;
 
         private Offer() { }
 
@@ -43,22 +43,22 @@ namespace UniqueShit.Domain.Offers
             Topic topic,
             Description description,
             Money price,
+            Guid appUserId,
             int offerTypeId,
             int itemConditionId,
             int sizeId,
-            int productCategoryId,
-            int manufacturerId,
+            int modelId,
             int quantity = 1)
         {
             Topic = topic;
             Description = description;
             Price = price;
+            AppUserId = appUserId;
             ItemConditionId = itemConditionId;
             Quantity = quantity;
             OfferTypeId = offerTypeId;
             SizeId = sizeId;
-            ProductCategoryId = productCategoryId;
-            ManufacturerId = manufacturerId;
+            ModelId = modelId;
             OfferStateId = OfferState.Active.Id;
         }
 
@@ -66,43 +66,40 @@ namespace UniqueShit.Domain.Offers
             Topic topic,
             Description description,
             Money price,
+            Guid appUserId,
             int itemConditionId,
             int sizeId,
-            int productCategoryId,
-            int manufacturerId,
+            int modelId,
             int quantity = 1)
             => new(
                 topic: topic,
                 description: description,
                 price: price,
+                appUserId: appUserId,
                 offerTypeId: OfferType.Purchase.Id,
                 itemConditionId: itemConditionId,
                 sizeId: sizeId,
-                productCategoryId: productCategoryId,
-                manufacturerId: manufacturerId,
+                modelId: modelId,
                 quantity: quantity);
 
         public static Offer CreateSaleOffer(
             Topic topic,
             Description description,
             Money price,
+            Guid appUserId,
             int itemConditionId,
             int sizeId,
-            int productCategoryId,
-            int manufacturerId,
+            int modelId,
             int quantity = 1)
             => new(
                 topic: topic,
                 description: description,
                 price: price,
+                appUserId: appUserId,
                 offerTypeId: OfferType.Sale.Id,
                 itemConditionId: itemConditionId,
                 sizeId: sizeId,
-                productCategoryId: productCategoryId,
-                manufacturerId: manufacturerId,
+               modelId: modelId,
                 quantity: quantity);
-
-        public void AddColours(List<Colour> colours)
-            => Colours.AddRange(colours);
     }
 }

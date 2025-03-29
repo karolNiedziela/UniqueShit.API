@@ -21,9 +21,17 @@ namespace UniqueShit.Application.Features.Models.Queries.GetModels
         {
             var modelsQuery = _dbContext.Set<Model>()
                 .AsNoTracking()
-                .Where(m => m.ProductCategoryId == request.ProductCategoryId)
-                .Where(m => m.ManufacturerId == request.ManufacturerId)
                 .AsQueryable();
+
+            if (request.ProductCategoryId.HasValue)
+            {
+                modelsQuery = modelsQuery.Where(m => m.ProductCategoryId == request.ProductCategoryId);
+            }
+
+            if (request.BrandId.HasValue)
+            {
+                modelsQuery = modelsQuery.Where(m => m.BrandId == request.BrandId);
+            }
 
             if (!string.IsNullOrEmpty(request.SearchTerm))
             {

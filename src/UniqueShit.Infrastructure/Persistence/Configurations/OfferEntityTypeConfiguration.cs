@@ -50,19 +50,19 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
                 .HasForeignKey(x => x.OfferTypeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.HasOne<ItemCondition>()
+                .WithMany()
+                .HasForeignKey(x => x.ItemConditionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasOne<Size>()
                 .WithMany()
                 .HasForeignKey(x => x.SizeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne<ProductCategory>()
+            builder.HasOne(x => x.Model)
                 .WithMany()
-                .HasForeignKey(x => x.ProductCategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne(x => x.Manufacturer)
-                .WithMany()
-                .HasForeignKey(x => x.ManufacturerId)
+                .HasForeignKey(x => x.ModelId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne<OfferState>()
@@ -70,13 +70,10 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
                 .HasForeignKey(x => x.OfferStateId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(x => x.Colours)
-             .WithMany()
-              .UsingEntity(
-                 "OfferColour",
-                 l => l.HasOne(typeof(Colour)).WithMany().HasForeignKey("ColourId").HasPrincipalKey(nameof(Colour.Id)),
-                 r => r.HasOne(typeof(Offer)).WithMany().HasForeignKey("OfferId").HasPrincipalKey(nameof(Offer.Id)),
-                 j => j.HasKey("ColourId", "OfferId"));
+            builder.HasOne(x => x.AppUser)
+                .WithMany()
+                .HasForeignKey(x => x.AppUserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -5,16 +5,16 @@ using UniqueShit.Domain.Repositories;
 
 namespace UniqueShit.Infrastructure.Persistence.Repositories
 {
-    internal sealed class ManufacturerRepository : IManufacturerRepository
+    internal sealed class ManufacturerRepository : IBrandRepository
     {
-        private readonly DbSet<Manufacturer> _manufacturerSet;
+        private readonly DbSet<Brand> _manufacturerSet;
 
         public ManufacturerRepository(IDbContext context)
         {
-            _manufacturerSet = context.Set<Manufacturer>();
+            _manufacturerSet = context.Set<Brand>();
         }
 
-        public async Task<Manufacturer?> GetAsync(int id)
+        public async Task<Brand?> GetAsync(int id)
             => await _manufacturerSet.FirstOrDefaultAsync(x => x.Id == id);
     }
 }

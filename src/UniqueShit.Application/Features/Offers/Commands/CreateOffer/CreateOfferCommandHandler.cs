@@ -1,4 +1,5 @@
-﻿using UniqueShit.Application.Core.Messaging;
+﻿using UniqueShit.Application.Core.Authentication;
+using UniqueShit.Application.Core.Messaging;
 using UniqueShit.Application.Core.Persistence;
 using UniqueShit.Domain.Core.Errors;
 using UniqueShit.Domain.Core.Primitives.Results;
@@ -12,20 +13,23 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
     public sealed class CreateOfferCommandHandler : ICommandHandler<CreateOfferCommand, Result<int>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IManufacturerRepository _manufacturerRepository;
         private readonly IOfferRepository _offerRepository;
         private readonly ISizeRepository _sizeRepository;
+        private readonly IModelRepository _modelRepository;
+        private readonly IUserIdentifierProvider _userIdentifierProvider;
 
         public CreateOfferCommandHandler(
             IUnitOfWork unitOfWork,
-            IManufacturerRepository manufacturerRepository,
             IOfferRepository offerRepository,
-            ISizeRepository sizeRepository)
+            ISizeRepository sizeRepository,
+            IModelRepository modelRepository,
+            IUserIdentifierProvider userIdentifierProvider)
         {
             _unitOfWork = unitOfWork;
-            _manufacturerRepository = manufacturerRepository;
             _offerRepository = offerRepository;
             _sizeRepository = sizeRepository;
+            _modelRepository = modelRepository;
+            _userIdentifierProvider = userIdentifierProvider;
         }
 
         public async Task<Result<int>> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
@@ -36,25 +40,20 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
                 return validationResult.Errors;
             }
 
-            var manufacturer = await _manufacturerRepository.GetAsync(request.ManufacturerId);
-            if (manufacturer is null)
+            var model = await _modelRepository.GetAsync(request.ModelId);
+            if (model is null)
             {
-                return DomainErrors.Offer.ManufacturerNotFound;
+                return DomainErrors.Offer.ModelNotFound;
             }
 
-            var size = await _sizeRepository.GetAsync(request.SizeId, request.ProductCategoryId);
+            var size = await _sizeRepository.GetAsync(request.SizeId, model.ProductCategoryId);
             if (size is null)
             {
                 return DomainErrors.Offer.SizeNotFound;
             }
 
-            var offer = CreateOffer(request, manufacturer.Id, size.Id);
+            var offer = CreateOffer(request, model.Id, size.Id);
             _offerRepository.Add(offer);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            offer.AddColours(request.ColourIds.Select(Colour.FromValue).Select(x => x.Value).ToList());
-            _offerRepository.Update(offer);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -63,13 +62,11 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
 
         private Result ValidateRequest(CreateOfferCommand request)
         {
-            var colourResults = request.ColourIds.Select(Colour.FromValue).ToList();
             var itemCondition = ItemCondition.FromValue(request.ItemConditionId);
             var offerType = OfferType.FromValue(request.OfferTypeId);
-            var productCategory = ProductCategory.FromValue(request.ProductCategoryId);
 
             var enumerationsValidationResult = Result.Success()
-                .AggregateErrors(colourResults[0], itemCondition, offerType, productCategory);
+                .AggregateErrors(itemCondition, offerType);
             if (enumerationsValidationResult.IsFailure)
             {
                 return enumerationsValidationResult;
@@ -88,18 +85,17 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
             return Result.Success();
         }
 
-        private Offer CreateOffer(CreateOfferCommand request, int manufacturerId, int sizeId)
+        private Offer CreateOffer(CreateOfferCommand request, int modelId, int sizeId)
         {
             var topic = Topic.Create(request.Topic).Value;
             var description = Description.Create(request.Description).Value;
             var price = Money.Create(request.Price.Amount, request.Price.Currency).Value;
             var itemConditionId = ItemCondition.FromValue(request.ItemConditionId).Value.Id;
-            var productCategoryId = ProductCategory.FromValue(request.ProductCategoryId).Value.Id;
             var offerTypeId = OfferType.FromValue(request.OfferTypeId).Value.Id;
 
             return offerTypeId == OfferType.Purchase.Id
-                ? Offer.CreatePurchaseOffer(topic, description, price, itemConditionId, sizeId, productCategoryId, manufacturerId, request.Quantity)
-                : Offer.CreateSaleOffer(topic, description, price, itemConditionId, sizeId, productCategoryId, manufacturerId, request.Quantity);
+                ? Offer.CreatePurchaseOffer(topic, description, price, _userIdentifierProvider.UserId, itemConditionId, sizeId, modelId, request.Quantity)
+                : Offer.CreateSaleOffer(topic, description, price, _userIdentifierProvider.UserId, itemConditionId, sizeId, modelId, request.Quantity);
         }
     }
 }

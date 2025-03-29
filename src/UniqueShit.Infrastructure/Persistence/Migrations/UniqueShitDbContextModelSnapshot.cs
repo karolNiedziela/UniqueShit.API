@@ -22,22 +22,47 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OfferColour", b =>
+            modelBuilder.Entity("UniqueShit.Domain.Enitities.AppUser", b =>
                 {
-                    b.Property<int>("ColourId")
+                    b.Property<Guid>("ADObjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("OfferId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.HasKey("ColourId", "OfferId");
+                    b.HasKey("ADObjectId");
 
-                    b.HasIndex("OfferId");
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("ADObjectId"), false);
 
-                    b.ToTable("OfferColour");
+                    b.HasIndex("ADObjectId");
+
+                    b.HasIndex("Id");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("Id"));
+
+                    b.ToTable("AppUser");
                 });
 
-            modelBuilder.Entity("UniqueShit.Domain.Enitities.Manufacturer", b =>
+            modelBuilder.Entity("UniqueShit.Domain.Enitities.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +77,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Manufacturer");
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
@@ -63,7 +88,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ManufacturerId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -76,7 +101,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManufacturerId");
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("ProductCategoryId");
 
@@ -324,6 +349,9 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
 
@@ -334,16 +362,13 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.Property<int>("ItemConditionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ManufacturerId")
+                    b.Property<int>("ModelId")
                         .HasColumnType("int");
 
                     b.Property<int>("OfferStateId")
                         .HasColumnType("int");
 
                     b.Property<int>("OfferTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -354,39 +379,26 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManufacturerId");
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("ItemConditionId");
+
+                    b.HasIndex("ModelId");
 
                     b.HasIndex("OfferStateId");
 
                     b.HasIndex("OfferTypeId");
-
-                    b.HasIndex("ProductCategoryId");
 
                     b.HasIndex("SizeId");
 
                     b.ToTable("Offer");
                 });
 
-            modelBuilder.Entity("OfferColour", b =>
-                {
-                    b.HasOne("UniqueShit.Domain.Enumerations.Colour", null)
-                        .WithMany()
-                        .HasForeignKey("ColourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniqueShit.Domain.Offers.Offer", null)
-                        .WithMany()
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
                 {
-                    b.HasOne("UniqueShit.Domain.Enitities.Manufacturer", "Manufacturer")
+                    b.HasOne("UniqueShit.Domain.Enitities.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("ManufacturerId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -396,7 +408,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Manufacturer");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Size", b =>
@@ -410,9 +422,21 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("UniqueShit.Domain.Offers.Offer", b =>
                 {
-                    b.HasOne("UniqueShit.Domain.Enitities.Manufacturer", "Manufacturer")
+                    b.HasOne("UniqueShit.Domain.Enitities.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("ManufacturerId")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("UniqueShit.Domain.Enumerations.ItemCondition", null)
+                        .WithMany()
+                        .HasForeignKey("ItemConditionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("UniqueShit.Domain.Enitities.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -425,12 +449,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.HasOne("UniqueShit.Domain.Enumerations.OfferType", null)
                         .WithMany()
                         .HasForeignKey("OfferTypeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("UniqueShit.Domain.Enumerations.ProductCategory", null)
-                        .WithMany()
-                        .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -501,10 +519,12 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("OfferId");
                         });
 
+                    b.Navigation("AppUser");
+
                     b.Navigation("Description")
                         .IsRequired();
 
-                    b.Navigation("Manufacturer");
+                    b.Navigation("Model");
 
                     b.Navigation("Price")
                         .IsRequired();

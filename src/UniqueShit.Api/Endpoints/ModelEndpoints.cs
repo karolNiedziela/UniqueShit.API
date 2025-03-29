@@ -22,13 +22,10 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Ok<PagedList<GetModelsResponse>>> GetModels(int productCategoryId,
-            int manufacturerId,
-            string? searchTerm,
+        public static async Task<Ok<PagedList<GetModelsResponse>>> GetModels(
+            [AsParameters] GetModelsQuery query,
             ISender sender)
         {
-            var query = new GetModelsQuery(productCategoryId, manufacturerId, searchTerm);
-
             var models = await sender.Send(query);
 
             return TypedResults.Ok(models);

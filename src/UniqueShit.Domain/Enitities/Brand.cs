@@ -2,15 +2,15 @@
 
 namespace UniqueShit.Domain.Enitities
 {
-    public sealed class Manufacturer : Entity
+    public sealed class Brand : Entity
     {
         public string Name { get; private set; } = default!;
 
-        public Manufacturer()
+        public Brand()
         {
         }
 
-        public Manufacturer(string name)
+        public Brand(string name)
         {
             Name = name;
         }

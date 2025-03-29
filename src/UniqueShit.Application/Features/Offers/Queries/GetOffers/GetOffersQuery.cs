@@ -1,15 +1,18 @@
-﻿using UniqueShit.Application.Core.Messaging;
+﻿using Microsoft.AspNetCore.Mvc;
+using UniqueShit.Application.Core.Messaging;
 using UniqueShit.Application.Core.Queries;
-using UniqueShit.Application.Features.Offers.Contracts.Responses;
 
 namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 {
     public sealed record GetOffersQuery(
-        int OfferTypeId,
-        int PageNumber,
-        int PageSize,
-        int? ItemConditionId = null,
-        int? SizeId = null,
-        int? ManufacturerId = null,
-        int? ProductCategoryId = null) : IQuery<PagedList<GetOffersResponse>>;
+        [FromQuery(Name = "otid")]int OfferTypeId,
+        [FromQuery(Name = "pn")] int PageNumber,
+        [FromQuery(Name = "ps")] int PageSize,
+        [FromQuery(Name = "minp")] decimal? MinimalPrice,
+        [FromQuery(Name = "maxp")] decimal? MaximumPrice,
+        [FromQuery(Name = "icid")] int? ItemConditionId = null,
+        [FromQuery(Name = "mid")] int? ModelId = null,
+        [FromQuery(Name = "sid")] int? SizeId = null,
+        [FromQuery(Name = "bid")] int? BrandId = null,
+        [FromQuery(Name = "pcid")] int? ProductCategoryId = null) : IQuery<PagedList<GetOffersResponse>>;
 }

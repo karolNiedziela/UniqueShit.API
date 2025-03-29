@@ -1,4 +1,4 @@
 ﻿namespace UniqueShit.Application.Features.Offers.Contracts.Responses
 {
-    public sealed record OfferManufacturerResponse(int Id, string Name);
+    public sealed record OfferBrandResponse(int Id, string Name);
 }

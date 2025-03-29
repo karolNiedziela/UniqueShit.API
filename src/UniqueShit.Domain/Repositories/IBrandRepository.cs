@@ -2,8 +2,8 @@
 
 namespace UniqueShit.Domain.Repositories
 {
-    public interface IManufacturerRepository
+    public interface IBrandRepository
     {
-        Task<Manufacturer?> GetAsync(int id);
+        Task<Brand?> GetAsync(int id);
     }
 }

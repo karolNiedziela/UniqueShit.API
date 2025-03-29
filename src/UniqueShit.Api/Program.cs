@@ -37,21 +37,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                     OnTokenValidated = context =>
                     {
-                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-
-                        // Access the scope claim (scp) directly
-                        var scopeClaim = context.Principal?.Claims.FirstOrDefault(c => c.Type == "scp")?.Value;
-
-                        if (scopeClaim != null)
-                        {
-                            logger.LogInformation("Scope found in token: {Scope}", scopeClaim);
-                        }
-                        else
-                        {
-                            logger.LogInformation("Scope claim not found in token.");
-                        }
-
-
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>
@@ -68,6 +53,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     }
                 };
             }, options => { configuration.Bind("AzureAdB2C", options); });
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(configuration);

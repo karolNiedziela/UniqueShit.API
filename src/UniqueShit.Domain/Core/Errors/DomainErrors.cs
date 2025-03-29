@@ -31,7 +31,7 @@ namespace UniqueShit.Domain.Core.Errors
         {
             public static Error SizeNotFound => new("Offer.SizeNotFound", "Size with the specified identifier was not found.");
 
-            public static Error ManufacturerNotFound => new("Offer.ManufacturerNotFound", "Manufacturer with the specified identifier was not found.");
+            public static Error ModelNotFound => new("Offer.ModelNotFound", "Model with the specified identifier was not found.");
         }
     }
 }

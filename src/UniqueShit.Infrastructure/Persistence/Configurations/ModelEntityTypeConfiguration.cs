@@ -17,9 +17,9 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
                 .WithMany()
                 .HasForeignKey(x => x.ProductCategoryId);
 
-            builder.HasOne(x => x.Manufacturer)
+            builder.HasOne(x => x.Brand)
                 .WithMany()
-                .HasForeignKey(x => x.ManufacturerId);
+                .HasForeignKey(x => x.BrandId);
         }
     }
 }

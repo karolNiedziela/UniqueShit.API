@@ -1,20 +1,21 @@
 ﻿using UniqueShit.Application.Core.Responses;
+using UniqueShit.Application.Features.Offers.Contracts.Responses;
 
-namespace UniqueShit.Application.Features.Offers.Contracts.Responses
+namespace UniqueShit.Application.Features.Offers.Queries.GetOffer
 {
-    public sealed class GetOffersResponse
+    public sealed class GetOfferResponse
     {
         public required int Id { get; set; }
 
         public required string Topic { get; set; }
 
-        public required OfferManufacturerResponse Manufacturer { get; set; }
+        public required string Description { get; set; }
+
+        public required OfferBrandResponse Brand { get; set; }
 
         public required MoneyResponse Price { get; set; }
 
         public required EnumerationResponse ItemCondition { get; set; }
-
-        public required List<EnumerationResponse> Colours { get; set; }
 
         public required int Quantity { get; set; }
     }

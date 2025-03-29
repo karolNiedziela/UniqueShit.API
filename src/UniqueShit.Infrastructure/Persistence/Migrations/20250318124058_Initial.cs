@@ -14,6 +14,36 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AppUser",
+                columns: table => new
+                {
+                    ADObjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUser", x => x.ADObjectId)
+                        .Annotation("SqlServer:Clustered", false);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Brand",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brand", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Colour",
                 columns: table => new
                 {
@@ -40,16 +70,16 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Manufacturer",
+                name: "OfferState",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Manufacturer", x => x.Id);
+                    table.PrimaryKey("PK_OfferState", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,15 +116,15 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ProductCategoryId = table.Column<int>(type: "int", nullable: false),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: false)
+                    BrandId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Model", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Model_Manufacturer_ManufacturerId",
-                        column: x => x.ManufacturerId,
-                        principalTable: "Manufacturer",
+                        name: "FK_Model_Brand_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brand",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -141,16 +171,32 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     OfferTypeId = table.Column<int>(type: "int", nullable: false),
                     ItemConditionId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: false),
-                    ProductCategoryId = table.Column<int>(type: "int", nullable: false)
+                    ModelId = table.Column<int>(type: "int", nullable: false),
+                    OfferStateId = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Offer", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Offer_Manufacturer_ManufacturerId",
-                        column: x => x.ManufacturerId,
-                        principalTable: "Manufacturer",
+                        name: "FK_Offer_AppUser_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AppUser",
+                        principalColumn: "ADObjectId");
+                    table.ForeignKey(
+                        name: "FK_Offer_ItemCondition_ItemConditionId",
+                        column: x => x.ItemConditionId,
+                        principalTable: "ItemCondition",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Offer_Model_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Model",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Offer_OfferState_OfferStateId",
+                        column: x => x.OfferStateId,
+                        principalTable: "OfferState",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Offer_OfferType_OfferTypeId",
@@ -158,39 +204,10 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         principalTable: "OfferType",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Offer_ProductCategory_ProductCategoryId",
-                        column: x => x.ProductCategoryId,
-                        principalTable: "ProductCategory",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Offer_Size_SizeId",
                         column: x => x.SizeId,
                         principalTable: "Size",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OfferColour",
-                columns: table => new
-                {
-                    ColourId = table.Column<int>(type: "int", nullable: false),
-                    OfferId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OfferColour", x => new { x.ColourId, x.OfferId });
-                    table.ForeignKey(
-                        name: "FK_OfferColour_Colour_ColourId",
-                        column: x => x.ColourId,
-                        principalTable: "Colour",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OfferColour_Offer_OfferId",
-                        column: x => x.OfferId,
-                        principalTable: "Offer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -213,6 +230,16 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     { 1, "New" },
                     { 2, "Used" },
                     { 3, "Damaged" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "OfferState",
+                columns: ["Id", "Name"],
+                values: new object[,]
+                {
+                    { 1, "Active" },
+                    { 2, "Expired" },
+                    { 3, "Completed" }
                 });
 
             migrationBuilder.InsertData(
@@ -241,9 +268,20 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Model_ManufacturerId",
+                name: "IX_AppUser_ADObjectId",
+                table: "AppUser",
+                column: "ADObjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUser_Id",
+                table: "AppUser",
+                column: "Id")
+                .Annotation("SqlServer:Clustered", true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Model_BrandId",
                 table: "Model",
-                column: "ManufacturerId");
+                column: "BrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Model_ProductCategoryId",
@@ -251,9 +289,24 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                 column: "ProductCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offer_ManufacturerId",
+                name: "IX_Offer_AppUserId",
                 table: "Offer",
-                column: "ManufacturerId");
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offer_ItemConditionId",
+                table: "Offer",
+                column: "ItemConditionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offer_ModelId",
+                table: "Offer",
+                column: "ModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offer_OfferStateId",
+                table: "Offer",
+                column: "OfferStateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Offer_OfferTypeId",
@@ -261,19 +314,9 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                 column: "OfferTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offer_ProductCategoryId",
-                table: "Offer",
-                column: "ProductCategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Offer_SizeId",
                 table: "Offer",
                 column: "SizeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OfferColour_OfferId",
-                table: "OfferColour",
-                column: "OfferId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Size_ProductCategoryId",
@@ -285,28 +328,31 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ItemCondition");
-
-            migrationBuilder.DropTable(
-                name: "Model");
-
-            migrationBuilder.DropTable(
-                name: "OfferColour");
-
-            migrationBuilder.DropTable(
                 name: "Colour");
 
             migrationBuilder.DropTable(
                 name: "Offer");
 
             migrationBuilder.DropTable(
-                name: "Manufacturer");
+                name: "AppUser");
+
+            migrationBuilder.DropTable(
+                name: "ItemCondition");
+
+            migrationBuilder.DropTable(
+                name: "Model");
+
+            migrationBuilder.DropTable(
+                name: "OfferState");
 
             migrationBuilder.DropTable(
                 name: "OfferType");
 
             migrationBuilder.DropTable(
                 name: "Size");
+
+            migrationBuilder.DropTable(
+                name: "Brand");
 
             migrationBuilder.DropTable(
                 name: "ProductCategory");

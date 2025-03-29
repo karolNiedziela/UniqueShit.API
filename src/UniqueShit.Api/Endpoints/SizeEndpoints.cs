@@ -16,8 +16,7 @@ namespace UniqueShit.Api.Endpoints
                 .WithName(nameof(GetSizes))
                 .WithMetadata(
                     new SwaggerOperationAttribute(summary: "Get sizes"),
-                    new ProducesResponseTypeAttribute(StatusCodes.Status200OK))
-                .RequireAuthorization();
+                    new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
             return builder;
         }

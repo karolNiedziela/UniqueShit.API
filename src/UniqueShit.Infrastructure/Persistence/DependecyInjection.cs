@@ -28,7 +28,10 @@ namespace UniqueShit.Infrastructure.Persistence
             services.AddScoped<IOfferRepository, OfferRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<ISizeRepository, SizeRepository>();
-            services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+            services.AddScoped<IBrandRepository, ManufacturerRepository>();
+
+
+            services.AddHostedService<MigratorHostedService>();
 
             return services;
         }

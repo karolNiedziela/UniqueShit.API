@@ -4,9 +4,9 @@ using UniqueShit.Domain.Enitities;
 
 namespace UniqueShit.Infrastructure.Persistence.Configurations
 {
-    internal sealed class ManufacturerEntityTypeConfiguration : IEntityTypeConfiguration<Manufacturer>
+    internal sealed class BrandEntityTypeConfiguration : IEntityTypeConfiguration<Brand>
     {
-        public void Configure(EntityTypeBuilder<Manufacturer> builder)
+        public void Configure(EntityTypeBuilder<Brand> builder)
         {
             builder.HasKey(x => x.Id);
 
