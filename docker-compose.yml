@@ -10,8 +10,9 @@ services:
     build:
       context: .
       dockerfile: src/UniqueShit.Api/Dockerfile
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5000:5001"
+      - "5001:5001"
 
   uniquestshit.mssql-db:
     container_name: UniqueSshit_MSSQL_DB
