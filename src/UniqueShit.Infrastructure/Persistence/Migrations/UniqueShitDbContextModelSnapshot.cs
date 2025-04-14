@@ -59,7 +59,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("Id"));
 
-                    b.ToTable("AppUser");
+                    b.ToTable("AppUser", (string)null);
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Brand", b =>
@@ -77,7 +77,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brand", (string)null);
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
@@ -105,7 +105,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("Model");
+                    b.ToTable("Model", (string)null);
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Size", b =>
@@ -128,7 +128,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("Size");
+                    b.ToTable("Size", (string)null);
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enumerations.Colour", b =>
@@ -146,7 +146,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colour");
+                    b.ToTable("Colour", (string)null);
 
                     b.HasData(
                         new
@@ -191,7 +191,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemCondition");
+                    b.ToTable("ItemCondition", (string)null);
 
                     b.HasData(
                         new
@@ -226,7 +226,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OfferState");
+                    b.ToTable("OfferState", (string)null);
 
                     b.HasData(
                         new
@@ -261,7 +261,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OfferType");
+                    b.ToTable("OfferType", (string)null);
 
                     b.HasData(
                         new
@@ -291,7 +291,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategory", (string)null);
 
                     b.HasData(
                         new
@@ -391,7 +391,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("Offer");
+                    b.ToTable("Offer", (string)null);
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
@@ -458,7 +458,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.OwnsOne("UniqueShit.Domain.Offers.ValueObjects.Description", "Description", b1 =>
+                    b.OwnsOne("UniqueShit.Domain.Offers.Offer.Description#UniqueShit.Domain.Offers.ValueObjects.Description", "Description", b1 =>
                         {
                             b1.Property<int>("OfferId")
                                 .HasColumnType("int");
@@ -471,13 +471,13 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("OfferId");
 
-                            b1.ToTable("Offer");
+                            b1.ToTable("Offer", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OfferId");
                         });
 
-                    b.OwnsOne("UniqueShit.Domain.Offers.ValueObjects.Money", "Price", b1 =>
+                    b.OwnsOne("UniqueShit.Domain.Offers.Offer.Price#UniqueShit.Domain.Offers.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<int>("OfferId")
                                 .HasColumnType("int");
@@ -494,13 +494,13 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("OfferId");
 
-                            b1.ToTable("Offer");
+                            b1.ToTable("Offer", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OfferId");
                         });
 
-                    b.OwnsOne("UniqueShit.Domain.Offers.ValueObjects.Topic", "Topic", b1 =>
+                    b.OwnsOne("UniqueShit.Domain.Offers.Offer.Topic#UniqueShit.Domain.Offers.ValueObjects.Topic", "Topic", b1 =>
                         {
                             b1.Property<int>("OfferId")
                                 .HasColumnType("int");
@@ -513,7 +513,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("OfferId");
 
-                            b1.ToTable("Offer");
+                            b1.ToTable("Offer", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OfferId");

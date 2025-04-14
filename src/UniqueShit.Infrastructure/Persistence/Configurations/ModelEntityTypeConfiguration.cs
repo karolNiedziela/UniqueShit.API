@@ -13,7 +13,7 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
 
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
 
-            builder.HasOne<ProductCategory>()
+            builder.HasOne(x => x.ProductCategory)
                 .WithMany()
                 .HasForeignKey(x => x.ProductCategoryId);
 

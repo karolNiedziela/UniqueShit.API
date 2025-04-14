@@ -73,7 +73,7 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
                 {
                     Id = x.Id,
                     Topic = x.Topic.Value,
-                    Brand = new OfferBrandResponse(x.Model.Brand.Id, x.Model.Brand.Name),
+                    Brand = new BrandResponse(x.Model.Brand.Id, x.Model.Brand.Name),
                     Model = new ModelResponse(x.Model.Id, x.Model.Name),
                     Price = new MoneyResponse(x.Price.Amount, x.Price.Currency),
                     ItemCondition = new EnumerationResponse(x.ItemConditionId, ItemCondition.FromValue(x.ItemConditionId).Value.Name),

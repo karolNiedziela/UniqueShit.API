@@ -1,4 +1,5 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
+using UniqueShit.Domain.Enumerations;
 
 namespace UniqueShit.Domain.Enitities
 {
@@ -7,6 +8,8 @@ namespace UniqueShit.Domain.Enitities
         public string Name { get; private set; } = default!;
 
         public int ProductCategoryId { get; private set; }
+
+        public ProductCategory ProductCategory { get; private set; } = default!;
 
         public int BrandId { get; private set; }
 

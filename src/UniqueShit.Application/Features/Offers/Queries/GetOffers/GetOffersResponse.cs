@@ -9,7 +9,7 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 
         public required string Topic { get; set; }
 
-        public required OfferBrandResponse Brand { get; set; }
+        public required BrandResponse Brand { get; set; }
 
         public required MoneyResponse Price { get; set; }
 

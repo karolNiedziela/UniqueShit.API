@@ -27,14 +27,15 @@ namespace UniqueShit.Api.Endpoints
                 .WithName(nameof(GetOffers))
                 .WithMetadata(
                  new SwaggerOperationAttribute(summary: "Get offers"),
-                 new ProducesResponseTypeAttribute(StatusCodes.Status200OK));           
+                 new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
             group.MapPost("", CreateOffer)
                 .WithName(nameof(CreateOffer))
                 .WithMetadata(
                     new SwaggerOperationAttribute(summary: "Add offer"),
                     new ProducesResponseTypeAttribute(StatusCodes.Status201Created),
-                    new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest));
+                    new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest))
+                .RequireAuthorization();
 
             return builder;
         }
