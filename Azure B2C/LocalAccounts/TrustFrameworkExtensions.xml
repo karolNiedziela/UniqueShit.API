@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="uniqueshit.onmicrosoft.com"
+  PolicyId="B2C_1A_TrustFrameworkExtensions"
+  PublicPolicyUri="http://uniqueshit.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+
+  <BasePolicy>
+    <TenantId>uniqueshit.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkLocalization</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">ce9b9e01-2429-47ba-a264-ed704e4977b1</Item>
+            <Item Key="IdTokenAudience">faf83ca8-7bb7-4a5e-adf3-6b2e6dede94c</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id"
+              DefaultValue="ce9b9e01-2429-47ba-a264-ed704e4977b1" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource"
+              DefaultValue="faf83ca8-7bb7-4a5e-adf3-6b2e6dede94c" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Call REST API</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="CallExternalApiOnSignup">
+          <DisplayName>Call external api</DisplayName>
+          <Protocol Name="Proprietary"
+            Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">
+              https://5c74-2a01-118f-4103-2000-cd8c-ea33-2058-824d.ngrok-free.app/api/v1/app-users</Item>
+            <Item Key="AuthenticationType">ApiKeyHeader</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="x-functions-key" StorageReferenceId="B2C_1A_RestApiHeaderKey" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+            <InputClaim ClaimTypeReferenceId="displayName" />
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <!--UserJourneys>
+	
+	</UserJourneys-->
+
+</TrustFrameworkPolicy>

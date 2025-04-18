@@ -8,7 +8,7 @@ using UniqueShit.Infrastructure.Persistence.Repositories;
 
 namespace UniqueShit.Infrastructure.Persistence
 {
-    public static class DependecyInjection
+    public static class DependencyInjection
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
@@ -29,6 +29,7 @@ namespace UniqueShit.Infrastructure.Persistence
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<ISizeRepository, SizeRepository>();
             services.AddScoped<IBrandRepository, ManufacturerRepository>();
+            services.AddScoped<IAppUserRepository, AppUserRepository>();
 
 
             services.AddHostedService<MigratorHostedService>();
