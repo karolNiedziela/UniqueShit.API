@@ -9,7 +9,7 @@ using UniqueShit.Domain.Enitities;
 
 namespace UniqueShit.Application.Features.Models.Queries.GetModels
 {
-    public sealed class GetModelsQueryHandler : IQueryHandler<GetModelsQuery, PagedList<GetModelsResponse>>
+    public sealed class GetModelsQueryHandler : IQueryHandler<GetModelsQuery, List<GetModelsResponse>>
     {
         private readonly IDbContext _dbContext;
 
@@ -18,7 +18,7 @@ namespace UniqueShit.Application.Features.Models.Queries.GetModels
             _dbContext = dbContext;
         }
 
-        public async Task<PagedList<GetModelsResponse>> Handle(GetModelsQuery request, CancellationToken cancellationToken)
+        public async Task<List<GetModelsResponse>> Handle(GetModelsQuery request, CancellationToken cancellationToken)
         {
             var modelsQuery = _dbContext.Set<Model>()
                 .AsNoTracking()
@@ -50,7 +50,7 @@ namespace UniqueShit.Application.Features.Models.Queries.GetModels
                 .PaginateAsync(PagedBase.DefaultPageNumber, PagedBase.DefaultPageSize, cancellationToken);
                 
 
-            return models;
+            return [.. models.Items];
         }
     }
 }

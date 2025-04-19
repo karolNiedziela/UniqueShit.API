@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using UniqueShit.Application.Core.Queries;
 using UniqueShit.Application.Features.Models.Queries.GetModels;
 
 namespace UniqueShit.Api.Endpoints
@@ -22,7 +21,7 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Ok<PagedList<GetModelsResponse>>> GetModels(
+        public static async Task<Ok<List<GetModelsResponse>>> GetModels(
             [AsParameters] GetModelsQuery query,
             ISender sender)
         {
