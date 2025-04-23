@@ -4,6 +4,8 @@ using UniqueShit.Application;
 using UniqueShit.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using System.Net.Http.Headers;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +24,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "Origin",
                       policy =>
                       {
-                          policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200");
+                          policy
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials()
+                          .WithOrigins("http://localhost:4200")
+                          .WithExposedHeaders(HeaderNames.Location);
                       });
 });
 
