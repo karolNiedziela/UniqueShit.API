@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Responses;
-using UniqueShit.Application.Features.Colours.Queries;
+using UniqueShit.Domain.Enumerations;
 
 namespace UniqueShit.Api.Endpoints
 {
@@ -22,14 +22,14 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Ok<List<EnumerationResponse>>> GetColours(
+        public static Task<Ok<List<EnumerationResponse>>> GetColours(
            ISender sender)
         {
-            var query = new GetColorsQuery();
+            var colours = Colour.List
+                .Select(x => new EnumerationResponse(x.Id, x.Name))
+                .ToList();
 
-            var colours = await sender.Send(query);
-
-            return TypedResults.Ok(colours);
+            return Task.FromResult(TypedResults.Ok(colours));
         }
     }
 }

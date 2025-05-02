@@ -6,7 +6,7 @@ namespace UniqueShit.Domain.Offers.Enumerations
     {
         public static readonly DeliveryType Meeting = new(1, nameof(Meeting));
         public static readonly DeliveryType Shipping = new(2, nameof(Shipping));
-        public static readonly DeliveryType Any = new(3, nameof(Any));
+        public static readonly DeliveryType Any = new(99, nameof(Any));
 
         public DeliveryType(int id, string name) : base(id, name)
         {            

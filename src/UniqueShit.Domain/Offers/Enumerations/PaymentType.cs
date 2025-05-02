@@ -7,7 +7,7 @@ namespace UniqueShit.Domain.Offers.Enumerations
         public static readonly PaymentType BankTransfer = new(1, "Bank transfer");
         public static readonly PaymentType Cash = new(2, "Cash");
         public static readonly PaymentType Blik = new(3, "Blik");
-        public static readonly PaymentType Any = new(4, "Any");
+        public static readonly PaymentType Any = new(99, "Any");
 
         public PaymentType(int id, string name) : base(id, name)
         {

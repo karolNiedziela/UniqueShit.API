@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Responses;
-using UniqueShit.Application.Features.ItemConditions.Queries;
+using UniqueShit.Domain.Enumerations;
 
 namespace UniqueShit.Api.Endpoints
 {
@@ -22,14 +22,14 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Ok<List<EnumerationResponse>>> GetItemConditions(
+        public static Task<Ok<List<EnumerationResponse>>> GetItemConditions(
            ISender sender)
         {
-            var query = new GetItemConditionsQuery();
+            List<EnumerationResponse>? itemConditions = ItemCondition.List
+                .Select(x => new EnumerationResponse(x.Id, x.Name))
+                .ToList();
 
-            var itemConditions = await sender.Send(query);
-
-            return TypedResults.Ok(itemConditions);
+            return Task.FromResult(TypedResults.Ok(itemConditions));
         }
     }
 }
