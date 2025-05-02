@@ -7,6 +7,7 @@ using UniqueShit.Application.Core.Responses;
 using UniqueShit.Application.Features.Offers.Contracts.Responses;
 using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
+using UniqueShit.Domain.Offers.Enumerations;
 
 namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 {

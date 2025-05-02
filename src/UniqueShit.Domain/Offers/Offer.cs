@@ -1,6 +1,8 @@
-﻿using UniqueShit.Domain.Core.Primitives;
+﻿using System.Drawing;
+using UniqueShit.Domain.Core.Primitives;
 using UniqueShit.Domain.Enitities;
 using UniqueShit.Domain.Enumerations;
+using UniqueShit.Domain.Offers.Enumerations;
 using UniqueShit.Domain.Offers.ValueObjects;
 
 namespace UniqueShit.Domain.Offers
@@ -37,6 +39,12 @@ namespace UniqueShit.Domain.Offers
 
         public AppUser AppUser { get; private set; } = default!;
 
+        public int DeliveryTypeId { get; private set; } = default!;
+
+        public int PaymentTypeId { get; private set; } = default!;
+
+        public List<Colour> Colours { get; private set; } = [];
+
         private Offer() { }
 
         private Offer(
@@ -48,6 +56,8 @@ namespace UniqueShit.Domain.Offers
             int itemConditionId,
             int sizeId,
             int modelId,
+            int deliveryTypeId,
+            int paymentTypeId,
             int quantity = 1)
         {
             Topic = topic;
@@ -59,6 +69,8 @@ namespace UniqueShit.Domain.Offers
             OfferTypeId = offerTypeId;
             SizeId = sizeId;
             ModelId = modelId;
+            DeliveryTypeId = deliveryTypeId;
+            PaymentTypeId = paymentTypeId;
             OfferStateId = OfferState.Active.Id;
         }
 
@@ -70,6 +82,8 @@ namespace UniqueShit.Domain.Offers
             int itemConditionId,
             int sizeId,
             int modelId,
+            int deliveryTypeId,
+            int paymentTypeId,
             int quantity = 1)
             => new(
                 topic: topic,
@@ -80,6 +94,8 @@ namespace UniqueShit.Domain.Offers
                 itemConditionId: itemConditionId,
                 sizeId: sizeId,
                 modelId: modelId,
+                deliveryTypeId: deliveryTypeId,
+                paymentTypeId: paymentTypeId,
                 quantity: quantity);
 
         public static Offer CreateSaleOffer(
@@ -90,6 +106,8 @@ namespace UniqueShit.Domain.Offers
             int itemConditionId,
             int sizeId,
             int modelId,
+            int deliveryTypeId,
+            int paymentTypeId,
             int quantity = 1)
             => new(
                 topic: topic,
@@ -99,7 +117,12 @@ namespace UniqueShit.Domain.Offers
                 offerTypeId: OfferType.Sale.Id,
                 itemConditionId: itemConditionId,
                 sizeId: sizeId,
-               modelId: modelId,
+                modelId: modelId,
+                deliveryTypeId: deliveryTypeId,
+                paymentTypeId: paymentTypeId,
                 quantity: quantity);
+
+        public void AddColours(IEnumerable<Colour> colours)
+                => Colours.AddRange(colours);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniqueShit.Domain.Enumerations;
+using UniqueShit.Domain.Offers.Enumerations;
 
 namespace UniqueShit.Infrastructure.Persistence.Configurations
 {

@@ -15,15 +15,18 @@ namespace UniqueShit.Domain.Enitities
 
         public Brand Brand { get; private set; } = default!;
 
+        public Guid? AppUserId { get; private set; } = default!;
+
         private Model()
         {
         }
 
-        public Model(string name, int productCategoryId, int brandId)
+        public Model(string name, int productCategoryId, int brandId, Guid? appUserId = null)
         {
             Name = name;
             ProductCategoryId = productCategoryId;
             BrandId = brandId;
+            AppUserId = appUserId;
         }
     }
 }

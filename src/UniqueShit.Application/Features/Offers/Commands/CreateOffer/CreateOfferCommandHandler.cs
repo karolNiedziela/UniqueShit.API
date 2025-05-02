@@ -5,6 +5,7 @@ using UniqueShit.Domain.Core.Errors;
 using UniqueShit.Domain.Core.Primitives.Results;
 using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
+using UniqueShit.Domain.Offers.Enumerations;
 using UniqueShit.Domain.Offers.ValueObjects;
 using UniqueShit.Domain.Repositories;
 
@@ -55,6 +56,17 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
             var offer = CreateOffer(request, model.Id, size.Id);
             _offerRepository.Add(offer);
 
+            var colours = request.ColourIds
+               .Select(Colour.FromValue)
+               .Select(x => x.Value)
+               .ToArray();
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            offer.AddColours(colours);
+
+            _offerRepository.Update(offer);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return offer.Id;
@@ -64,9 +76,14 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
         {
             var itemCondition = ItemCondition.FromValue(request.ItemConditionId);
             var offerType = OfferType.FromValue(request.OfferTypeId);
+            var deliveryType = DeliveryType.FromValue(request.DeliveryTypeId);
+            var paymentType = PaymentType.FromValue(request.PaymentTypeId);
+            var colours = request.ColourIds
+                .Select(Colour.FromValue)
+                .ToArray();
 
             var enumerationsValidationResult = Result.Success()
-                .AggregateErrors(itemCondition, offerType);
+                .AggregateErrors([itemCondition, offerType, deliveryType, paymentType, ..colours]); 
             if (enumerationsValidationResult.IsFailure)
             {
                 return enumerationsValidationResult;
@@ -76,7 +93,7 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
             var description = Description.Create(request.Description);
             var price = Money.Create(request.Price.Amount, request.Price.Currency);
 
-            var valueObjectsValidationResult = Result.Success().AggregateErrors(topic, description, price);
+            var valueObjectsValidationResult = Result.Success().AggregateErrors([topic, description, price]);
             if (valueObjectsValidationResult.IsFailure)
             {
                 return valueObjectsValidationResult;
@@ -92,10 +109,13 @@ namespace UniqueShit.Application.Features.Offers.Commands.CreateOffer
             var price = Money.Create(request.Price.Amount, request.Price.Currency).Value;
             var itemConditionId = ItemCondition.FromValue(request.ItemConditionId).Value.Id;
             var offerTypeId = OfferType.FromValue(request.OfferTypeId).Value.Id;
+            var deliveryTypeId = DeliveryType.FromValue(request.DeliveryTypeId).Value.Id;
+            var paymentTypeId = PaymentType.FromValue(request.PaymentTypeId).Value.Id;
 
             return offerTypeId == OfferType.Purchase.Id
-                ? Offer.CreatePurchaseOffer(topic, description, price, _userIdentifierProvider.UserId, itemConditionId, sizeId, modelId, request.Quantity)
-                : Offer.CreateSaleOffer(topic, description, price, _userIdentifierProvider.UserId, itemConditionId, sizeId, modelId, request.Quantity);
+                ? Offer.CreatePurchaseOffer(topic, description, price, _userIdentifierProvider.UserId, itemConditionId, sizeId,
+                modelId, deliveryTypeId, paymentTypeId, request.Quantity)
+                : Offer.CreateSaleOffer(topic, description, price, _userIdentifierProvider.UserId, itemConditionId, sizeId, modelId, deliveryTypeId, paymentTypeId, request.Quantity);
         }
     }
 }

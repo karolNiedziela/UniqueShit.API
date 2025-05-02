@@ -16,5 +16,8 @@ namespace UniqueShit.Infrastructure.Persistence.Repositories
 
         public async Task<Model?> GetAsync(int id)
             => await _models.FirstOrDefaultAsync(x => x.Id == id);
+
+        public void Add(Model model)
+            => _models.Add(model);
     }
 }

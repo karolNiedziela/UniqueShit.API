@@ -11,11 +11,15 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffer
 
         public required string Description { get; set; }
 
-        public required BrandResponse Brand { get; set; }
+        public required ModelDetailsResponse Model { get; set; }
 
         public required MoneyResponse Price { get; set; }
 
         public required EnumerationResponse ItemCondition { get; set; }
+
+        public required EnumerationResponse PaymentType { get; set; }
+
+        public required EnumerationResponse DeliveryType { get; set; }
 
         public required int Quantity { get; set; }
     }

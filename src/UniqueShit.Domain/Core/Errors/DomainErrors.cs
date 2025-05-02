@@ -32,6 +32,15 @@ namespace UniqueShit.Domain.Core.Errors
             public static Error SizeNotFound => new("Offer.SizeNotFound", "Size with the specified identifier was not found.");
 
             public static Error ModelNotFound => new("Offer.ModelNotFound", "Model with the specified identifier was not found.");
+
+            public static Error OfferNotFound => new("Offer.OfferNotFound", "Offer with the specified identifier was not found.");
+
+            public static Error NoPrivilegesToRemove => new("Offer.NoPrivilegesToRemove", "You have no privileges to remove this offer.", ErrorType.Forbidden);
+        }
+
+        public static class Model
+        {
+            public static Error BrandNotFound => new("Model.BrandNotFound", "Brand with the specified identifier was not found.");
         }
     }
 }

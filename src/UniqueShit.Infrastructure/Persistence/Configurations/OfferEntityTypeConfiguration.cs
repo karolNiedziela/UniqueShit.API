@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniqueShit.Domain.Enitities;
 using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
+using UniqueShit.Domain.Offers.Enumerations;
 using UniqueShit.Domain.Offers.ValueObjects;
 
 namespace UniqueShit.Infrastructure.Persistence.Configurations
@@ -12,6 +13,7 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Offer> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.OwnsOne(x => x.Topic, topicBuilder =>
             {
@@ -70,10 +72,27 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
                 .HasForeignKey(x => x.OfferStateId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.HasOne<DeliveryType>()
+                .WithMany()
+                .HasForeignKey(x => x.DeliveryTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne<PaymentType>()
+                .WithMany()
+                .HasForeignKey(x => x.PaymentTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasOne(x => x.AppUser)
                 .WithMany()
                 .HasForeignKey(x => x.AppUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(x => x.Colours)
+                .WithMany()
+                .UsingEntity(
+                    "OfferColour",
+                    l => l.HasOne(typeof(Colour)).WithMany().HasForeignKey("ColourId"),
+                    r => r.HasOne(typeof(Offer)).WithMany().HasForeignKey("OfferId"));
         }
     }
 }

@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Queries;
 using UniqueShit.Application.Features.Offers.Commands.CreateOffer;
+using UniqueShit.Application.Features.Offers.Commands.DeleteOffer;
 using UniqueShit.Application.Features.Offers.Queries.GetOffer;
 using UniqueShit.Application.Features.Offers.Queries.GetOffers;
+using UniqueShit.Application.Features.Offers.Queries.MyOffers;
 using UniqueShit.Domain.Core.Primitives;
 
 namespace UniqueShit.Api.Endpoints
@@ -29,12 +31,28 @@ namespace UniqueShit.Api.Endpoints
                  new SwaggerOperationAttribute(summary: "Get offers"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
+            group.MapGet("my", GetMyOffers)
+                .WithName(nameof(GetMyOffers))
+                .WithMetadata(
+                 new SwaggerOperationAttribute(summary: "Get my offers"),
+                 new ProducesResponseTypeAttribute(StatusCodes.Status200OK))
+                .RequireAuthorization();
+
             group.MapPost("", CreateOffer)
                 .WithName(nameof(CreateOffer))
                 .WithMetadata(
                     new SwaggerOperationAttribute(summary: "Add offer"),
                     new ProducesResponseTypeAttribute(StatusCodes.Status201Created),
                     new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest))
+                .RequireAuthorization();
+
+            group.MapDelete("{offerId:int}", DeleteOffer)
+                .WithName(nameof(DeleteOffer))
+                .WithMetadata(
+                 new SwaggerOperationAttribute(summary: "Delete offer"),
+                 new ProducesResponseTypeAttribute(StatusCodes.Status204NoContent),
+                 new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest),
+                 new ProducesResponseTypeAttribute(StatusCodes.Status403Forbidden))
                 .RequireAuthorization();
 
             return builder;
@@ -60,6 +78,14 @@ namespace UniqueShit.Api.Endpoints
             return TypedResults.Ok(offers);
         }
 
+        public static async Task<Ok<PagedList<MyOffersResponse>>> GetMyOffers(
+         ISender sender)
+        {
+            var myOffers = await sender.Send(new MyOffersQuery());
+
+            return TypedResults.Ok(myOffers);
+        }
+
         public static async Task<Results<Created, BadRequest<List<Error>>>> CreateOffer(
             CreateOfferCommand command,
             ISender sender,
@@ -79,6 +105,25 @@ namespace UniqueShit.Api.Endpoints
                      return TypedResults.Created(new Uri(offerLink!));
                  },
                 onError: (List<Error> errors) => TypedResults.BadRequest(errors));
+        }
+
+        public static async Task<Results<NoContent, BadRequest<List<Error>>, ForbidHttpResult>> DeleteOffer(
+            int offerId,
+            ISender sender)
+        {
+            var result = await sender.Send(new DeleteOfferCommand(offerId));
+
+            if (result.IsSuccess)
+            {
+                return TypedResults.NoContent();
+            }
+
+            if (result.Errors.Any(x => x.ErrorType == ErrorType.Forbidden))
+            {
+                return TypedResults.Forbid();
+            }
+
+            return TypedResults.BadRequest(result.Errors);
         }
     }
 }

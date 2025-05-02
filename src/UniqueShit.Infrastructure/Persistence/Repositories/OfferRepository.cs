@@ -14,6 +14,9 @@ namespace UniqueShit.Infrastructure.Persistence.Repositories
             _offers = dbContext.Set<Offer>();
         }
 
+        public async Task<Offer?> Get(int offerId)
+         => await _offers.FirstOrDefaultAsync(x => x.Id == offerId);
+
         public void Add(Offer offer)
             => _offers.Add(offer);
 

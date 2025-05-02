@@ -1,6 +1,6 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
 
-namespace UniqueShit.Domain.Enumerations
+namespace UniqueShit.Domain.Offers.Enumerations
 {
     public sealed class OfferType : Enumeration<OfferType>
     {

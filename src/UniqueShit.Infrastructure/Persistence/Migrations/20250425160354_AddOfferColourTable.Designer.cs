@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniqueShit.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using UniqueShit.Infrastructure.Persistence;
 namespace UniqueShit.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(UniqueShitDbContext))]
-    partial class UniqueShitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250425160354_AddOfferColourTable")]
+    partial class AddOfferColourTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
@@ -118,8 +118,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("BrandId");
 
@@ -231,6 +229,71 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("UniqueShit.Domain.Enumerations.OfferState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OfferState");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Active"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Expired"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Completed"
+                        });
+                });
+
+            modelBuilder.Entity("UniqueShit.Domain.Enumerations.OfferType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OfferType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Purchase"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Sale"
+                        });
+                });
+
             modelBuilder.Entity("UniqueShit.Domain.Enumerations.ProductCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -296,146 +359,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("UniqueShit.Domain.Offers.Enumerations.DeliveryType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeliveryType");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Meeting"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Shipping"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Any"
-                        });
-                });
-
-            modelBuilder.Entity("UniqueShit.Domain.Offers.Enumerations.OfferState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OfferState");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Active"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Expired"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Completed"
-                        });
-                });
-
-            modelBuilder.Entity("UniqueShit.Domain.Offers.Enumerations.OfferType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OfferType");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Purchase"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Sale"
-                        });
-                });
-
-            modelBuilder.Entity("UniqueShit.Domain.Offers.Enumerations.PaymentType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentType");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Bank transfer"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Cash"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Blik"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Any"
-                        });
-                });
-
             modelBuilder.Entity("UniqueShit.Domain.Offers.Offer", b =>
                 {
                     b.Property<int>("Id")
@@ -449,9 +372,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("DeliveryTypeId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ExpiredAtUtc")
                         .IsRequired()
@@ -469,9 +389,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.Property<int>("OfferTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PaymentTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -482,8 +399,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("DeliveryTypeId");
-
                     b.HasIndex("ItemConditionId");
 
                     b.HasIndex("ModelId");
@@ -491,8 +406,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.HasIndex("OfferStateId");
 
                     b.HasIndex("OfferTypeId");
-
-                    b.HasIndex("PaymentTypeId");
 
                     b.HasIndex("SizeId");
 
@@ -516,10 +429,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
                 {
-                    b.HasOne("UniqueShit.Domain.Enitities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("UniqueShit.Domain.Enitities.Brand", "Brand")
                         .WithMany()
                         .HasForeignKey("BrandId")
@@ -554,12 +463,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("UniqueShit.Domain.Offers.Enumerations.DeliveryType", null)
-                        .WithMany()
-                        .HasForeignKey("DeliveryTypeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("UniqueShit.Domain.Enumerations.ItemCondition", null)
                         .WithMany()
                         .HasForeignKey("ItemConditionId")
@@ -572,21 +475,15 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("UniqueShit.Domain.Offers.Enumerations.OfferState", null)
+                    b.HasOne("UniqueShit.Domain.Enumerations.OfferState", null)
                         .WithMany()
                         .HasForeignKey("OfferStateId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("UniqueShit.Domain.Offers.Enumerations.OfferType", null)
+                    b.HasOne("UniqueShit.Domain.Enumerations.OfferType", null)
                         .WithMany()
                         .HasForeignKey("OfferTypeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("UniqueShit.Domain.Offers.Enumerations.PaymentType", null)
-                        .WithMany()
-                        .HasForeignKey("PaymentTypeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

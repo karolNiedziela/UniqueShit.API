@@ -22,7 +22,7 @@ namespace UniqueShit.Domain.Core.Primitives
 
         public static Result<TEnum> FromValue(int id)
         {
-            return Enumerations.TryGetValue(id, out TEnum? enumeration) ? enumeration : new Error($"{typeof(TEnum).Name}.NotFound", "Value with given id does not exist.");
+            return Enumerations.TryGetValue(id, out TEnum? enumeration) ? enumeration : new Error($"{typeof(TEnum).Name}.NotFound", $"{typeof(TEnum).Name} with given id '{id}' does not exist.");
         }
 
         public static Result<TEnum> FromName(string name)
@@ -33,7 +33,7 @@ namespace UniqueShit.Domain.Core.Primitives
 
             if (enumeration == null)
             {
-                return new Error($"{typeof(TEnum).Name}.NotFound", "Value with given name does not exist.");
+                return new Error($"{typeof(TEnum).Name}.NotFound", $"{typeof(TEnum).Name} with given name '{name}' does not exist.");
             }
 
             return enumeration;

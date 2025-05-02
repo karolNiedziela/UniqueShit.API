@@ -26,7 +26,9 @@
         public static implicit operator Result<TValue>(List<Error> errors) => new(errors);
 
 
-        public TNextValue Match<TNextValue>(Func<TValue, TNextValue> onSuccess, Func<List<Error>, TNextValue> onError)
+        public TNextValue Match<TNextValue>(
+            Func<TValue, TNextValue> onSuccess, 
+            Func<List<Error>, TNextValue> onError)
         {
             if (IsFailure)
             {
@@ -34,24 +36,6 @@
             }
 
             return onSuccess(Value);
-        }
-
-        public TNextValue Match<TNextValue>(
-            Func<TValue, TNextValue> onSuccess,
-            Func<List<Error>, TNextValue> onError,
-            Func<Error, TNextValue> onConflict)
-        {
-            if (!IsFailure)
-            {
-                return onSuccess(Value);
-            }
-
-            if (Errors.Any(x => x.ErrorType == ErrorType.Conflict))
-            {
-                return onConflict(Errors[0]);
-            }
-
-            return onError(Errors);
         }
     }
 }

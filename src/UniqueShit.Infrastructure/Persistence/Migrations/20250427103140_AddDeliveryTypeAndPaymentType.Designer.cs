@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniqueShit.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using UniqueShit.Infrastructure.Persistence;
 namespace UniqueShit.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(UniqueShitDbContext))]
-    partial class UniqueShitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427103140_AddDeliveryTypeAndPaymentType")]
+    partial class AddDeliveryTypeAndPaymentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
@@ -118,8 +118,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("BrandId");
 
@@ -516,10 +514,6 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
                 {
-                    b.HasOne("UniqueShit.Domain.Enitities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("UniqueShit.Domain.Enitities.Brand", "Brand")
                         .WithMany()
                         .HasForeignKey("BrandId")

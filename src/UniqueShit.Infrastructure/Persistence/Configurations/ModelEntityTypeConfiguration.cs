@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniqueShit.Domain.Enitities;
-using UniqueShit.Domain.Enumerations;
 
 namespace UniqueShit.Infrastructure.Persistence.Configurations
 {
@@ -20,6 +19,10 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
             builder.HasOne(x => x.Brand)
                 .WithMany()
                 .HasForeignKey(x => x.BrandId);
+
+            builder.HasOne<AppUser>()
+                .WithMany()
+                .HasForeignKey(x => x.AppUserId);
         }
     }
 }

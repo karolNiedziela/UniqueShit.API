@@ -19,6 +19,7 @@ namespace UniqueShit.Application.Features.Models.Queries.GetModels
         {
             var modelsQuery = _dbContext.Set<Model>()
                 .AsNoTracking()
+                .Where(x => x.AppUserId == null)
                 .AsQueryable();
 
             if (request.ProductCategoryId.HasValue)
