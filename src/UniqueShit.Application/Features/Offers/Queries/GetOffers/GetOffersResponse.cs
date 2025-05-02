@@ -18,5 +18,7 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
         public required EnumerationResponse ItemCondition { get; set; }
 
         public required int Quantity { get; set; }
+
+        public required EnumerationResponse OfferType { get; set; }
     }
 }

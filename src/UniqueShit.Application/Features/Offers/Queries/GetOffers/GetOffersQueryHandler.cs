@@ -22,22 +22,16 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 
         public async Task<PagedList<GetOffersResponse>> Handle(GetOffersQuery request, CancellationToken cancellationToken)
         {
-            var offerType = OfferType.FromValue(request.OfferTypeId);
-            if (offerType.IsFailure)
-            {
-                return PagedList<GetOffersResponse>.Empty();
-            }
-
             var offersQuery = _dbContext.Set<Offer>()
                 .AsNoTracking()
-                .Where(x => x.OfferTypeId == offerType.Value.Id && x.OfferStateId == OfferState.Active.Id)
+                .Where(x => x.OfferStateId == OfferState.Active.Id)
                 .AsQueryable();
 
-            if (offersQuery is null)
+            if (request.OfferTypeId.HasValue)
             {
-                return PagedList<GetOffersResponse>.Empty();
+                offersQuery = offersQuery.Where(x => x.OfferTypeId == request.OfferTypeId.Value);
             }
-
+                 
             if (request.ItemConditionId.HasValue)
             {
                 offersQuery = offersQuery.Where(x => x.ItemConditionId == request.ItemConditionId.Value);
@@ -79,6 +73,7 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
                     Price = new MoneyResponse(x.Price.Amount, x.Price.Currency),
                     ItemCondition = new EnumerationResponse(x.ItemConditionId, ItemCondition.FromValue(x.ItemConditionId).Value.Name),
                     Quantity = x.Quantity,
+                    OfferType = new EnumerationResponse(x.OfferTypeId, OfferType.FromValue(x.OfferTypeId).Value.Name),
                 })
                 .PaginateAsync(request.PageNumber, request.PageSize, cancellationToken);
 
@@ -87,11 +82,6 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 
         private IQueryable<Offer> ApplyPriceRangeFilter(IQueryable<Offer> offersQuery, GetOffersQuery request)
         {
-            if (!request.MinimalPrice.HasValue && !request.MaximumPrice.HasValue)
-            {
-                return offersQuery;
-            }
-
             if (request.MinimalPrice.HasValue)
             {
                 offersQuery = offersQuery.Where(x => x.Price.Amount >= request.MinimalPrice.Value);

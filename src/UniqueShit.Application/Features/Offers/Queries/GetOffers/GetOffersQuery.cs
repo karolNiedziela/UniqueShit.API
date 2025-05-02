@@ -5,9 +5,9 @@ using UniqueShit.Application.Core.Queries;
 namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
 {
     public sealed record GetOffersQuery(
-        [FromQuery(Name = "otid")]int OfferTypeId,
         [FromQuery(Name = "pn")] int PageNumber,
         [FromQuery(Name = "ps")] int PageSize,
+        [FromQuery(Name = "otid")]int? OfferTypeId,
         [FromQuery(Name = "minp")] decimal? MinimalPrice,
         [FromQuery(Name = "maxp")] decimal? MaximumPrice,
         [FromQuery(Name = "icid")] int? ItemConditionId = null,
