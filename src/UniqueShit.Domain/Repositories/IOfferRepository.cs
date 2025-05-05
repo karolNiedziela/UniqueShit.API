@@ -6,6 +6,8 @@ namespace UniqueShit.Domain.Repositories
     {
         Task<Offer?> Get(int offerId);
 
+        Task<bool> ActiveExistsAsync(int offerId);
+
         void Add(Offer offer);
 
         void Update(Offer offer);

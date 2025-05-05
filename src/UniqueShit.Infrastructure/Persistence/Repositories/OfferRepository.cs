@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniqueShit.Application.Core.Persistence;
 using UniqueShit.Domain.Offers;
+using UniqueShit.Domain.Offers.Enumerations;
 using UniqueShit.Domain.Repositories;
 
 namespace UniqueShit.Infrastructure.Persistence.Repositories
@@ -15,12 +16,16 @@ namespace UniqueShit.Infrastructure.Persistence.Repositories
         }
 
         public async Task<Offer?> Get(int offerId)
-         => await _offers.FirstOrDefaultAsync(x => x.Id == offerId);
+            => await _offers.FirstOrDefaultAsync(x => x.Id == offerId);
+
+        public async Task<bool> ActiveExistsAsync(int offerId)
+            => await _offers.AnyAsync(x => x.OfferStateId == OfferState.Active.Id && x.Id == offerId);
 
         public void Add(Offer offer)
             => _offers.Add(offer);
 
         public void Update(Offer offer)
             => _offers.Update(offer);
+
     }
 }

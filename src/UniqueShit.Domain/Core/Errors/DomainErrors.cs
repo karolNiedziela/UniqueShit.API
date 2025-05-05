@@ -42,5 +42,12 @@ namespace UniqueShit.Domain.Core.Errors
         {
             public static Error BrandNotFound => new("Model.BrandNotFound", "Brand with the specified identifier was not found.");
         }
+
+        public static class FavouriteOffer
+        {
+            public static Error FavouriteOfferNotFound => new("FavouriteOffer.NotFound", "Favourite offer with the specified identifier was not found.");
+
+            public static Error OfferNotFound => new("FavouriteOffer.OfferNotFound", "Offer with the specified identifier was not found.");
+        }
     }
 }

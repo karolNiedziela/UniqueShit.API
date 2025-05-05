@@ -30,6 +30,7 @@ namespace UniqueShit.Infrastructure.Persistence
             services.AddScoped<ISizeRepository, SizeRepository>();
             services.AddScoped<IBrandRepository, ManufacturerRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
+            services.AddScoped<IFavouriteOfferRepository, FavouriteOfferRepository>();
 
 
             services.AddHostedService<MigratorHostedService>();
