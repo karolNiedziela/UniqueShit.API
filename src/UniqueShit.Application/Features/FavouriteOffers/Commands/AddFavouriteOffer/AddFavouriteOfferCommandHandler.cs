@@ -11,21 +11,21 @@ namespace UniqueShit.Application.Features.FavouriteOffers.Commands.AddFavouriteO
     public sealed class AddFavouriteOfferCommandHandler : ICommandHandler<AddFavouriteOfferCommand, Result>
     {
         private readonly IUserIdentifierProvider _userIdentifierProvider;
-        private readonly IOfferRepository _offerRepository;
+        private readonly ISaleOfferRepository _saleOfferRepository;
         private readonly IFavouriteOfferRepository _favouriteOfferRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AddFavouriteOfferCommandHandler(IUserIdentifierProvider userIdentifierProvider, IOfferRepository offerRepository, IFavouriteOfferRepository favouriteOfferRepository, IUnitOfWork unitOfWork)
+        public AddFavouriteOfferCommandHandler(IUserIdentifierProvider userIdentifierProvider, ISaleOfferRepository saleOfferRepository, IFavouriteOfferRepository favouriteOfferRepository, IUnitOfWork unitOfWork)
         {
             _userIdentifierProvider = userIdentifierProvider;
-            _offerRepository = offerRepository;
+            _saleOfferRepository = saleOfferRepository;
             _favouriteOfferRepository = favouriteOfferRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<Result> Handle(AddFavouriteOfferCommand request, CancellationToken cancellationToken)
         {
-            if (!await _offerRepository.ActiveExistsAsync(request.OfferId))
+            if (!await _saleOfferRepository.ActiveExistsAsync(request.OfferId))
             {
                 return DomainErrors.FavouriteOffer.OfferNotFound;
             }

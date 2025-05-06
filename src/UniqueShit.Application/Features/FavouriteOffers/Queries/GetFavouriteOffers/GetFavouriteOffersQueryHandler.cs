@@ -25,8 +25,8 @@ namespace UniqueShit.Application.Features.FavouriteOffers.Queries.GetFavouriteOf
                 .Where(x => x.AppUserId == _userIdentifierProvider.UserId)
                 .Select(x => new GetFavouriteOffersResponse(
                     x.Id,
-                    x.OfferId,
-                    x.Offer.Topic.Value))
+                    x.SaleOfferId,
+                    x.SaleOffer.Topic.Value))
                 .PaginateAsync(request.PageNumber, request.PageSize, cancellationToken);
 
             return favouriteOffers;

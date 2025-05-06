@@ -9,26 +9,26 @@ using UniqueShit.Application.Features.Offers.Contracts.Responses;
 using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
 
-namespace UniqueShit.Application.Features.Offers.Queries.MyOffers
+namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.MySaleOffers
 {
-    public sealed class MyOffersQueryHandler : IQueryHandler<MyOffersQuery, PagedList<MyOffersResponse>>
+    public sealed class MySaleOffersQueryHandler : IQueryHandler<MySaleOffersQuery, PagedList<MySaleOffersResponse>>
     {
         private readonly IDbContext _dbContext;
         private readonly IUserIdentifierProvider _userIdentifierProvider;
 
-        public MyOffersQueryHandler(IDbContext dbContext, IUserIdentifierProvider userIdentifierProvider)
+        public MySaleOffersQueryHandler(IDbContext dbContext, IUserIdentifierProvider userIdentifierProvider)
         {
             _dbContext = dbContext;
             _userIdentifierProvider = userIdentifierProvider;
         }
 
-        public async Task<PagedList<MyOffersResponse>> Handle(MyOffersQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<MySaleOffersResponse>> Handle(MySaleOffersQuery request, CancellationToken cancellationToken)
         {
-            var myOffers = await _dbContext.Set<Offer>()
+            var myOffers = await _dbContext.Set<SaleOffer>()
                 .AsNoTracking()
                 .Where(x => x.AppUserId == _userIdentifierProvider.UserId)
                 .OrderByDescending(x => x.CreatedOnUtc)
-                .Select(x => new MyOffersResponse
+                .Select(x => new MySaleOffersResponse
                 {
                     Id = x.Id,
                     Topic = x.Topic.Value,

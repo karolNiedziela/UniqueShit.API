@@ -6,7 +6,7 @@ using UniqueShit.Application.Core.Persistence;
 namespace UniqueShit.Application.Core.Behaviors
 {
     internal sealed class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-      where TRequest : class, IRequest<TResponse>
+      where TRequest : class, ICommand<TResponse>
       where TResponse : class
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -15,11 +15,6 @@ namespace UniqueShit.Application.Core.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (request is IQuery<TResponse>)
-            {
-                return await next();
-            }
-
             await using IDbContextTransaction transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try

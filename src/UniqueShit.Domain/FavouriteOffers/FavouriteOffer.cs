@@ -6,9 +6,9 @@ namespace UniqueShit.Domain.FavouriteOffers
 {
     public sealed class FavouriteOffer : Entity
     {
-        public int OfferId { get; private set; }
+        public int SaleOfferId { get; private set; }
 
-        public Offer Offer { get; private set; } = default!;
+        public SaleOffer SaleOffer { get; private set; } = default!;
 
         public Guid AppUserId { get; private set; }
 
@@ -18,9 +18,9 @@ namespace UniqueShit.Domain.FavouriteOffers
 
         private FavouriteOffer() { }
 
-        public FavouriteOffer(int offerId, Guid appUserId)
+        public FavouriteOffer(int saleOfferId, Guid appUserId)
         {
-            OfferId = offerId;
+            SaleOfferId = saleOfferId;
             AppUserId = appUserId;
         }
     }

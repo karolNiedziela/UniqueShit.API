@@ -1,9 +1,9 @@
 ﻿using UniqueShit.Application.Core.Responses;
 using UniqueShit.Application.Features.Offers.Contracts.Responses;
 
-namespace UniqueShit.Application.Features.Offers.Queries.MyOffers
+namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffers
 {
-    public sealed class MyOffersResponse
+    public sealed class GetSaleOffersResponse
     {
         public required int Id { get; set; }
 

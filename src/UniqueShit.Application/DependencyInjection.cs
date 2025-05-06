@@ -22,6 +22,7 @@ namespace UniqueShit.Application
             {
                 configuration.RegisterServicesFromAssembly(applicationAssembly);
 
+                configuration.AddOpenBehavior(typeof(ValidationBehaviour<,>));
                 configuration.AddOpenBehavior(typeof(TransactionBehaviour<,>));
             });
 

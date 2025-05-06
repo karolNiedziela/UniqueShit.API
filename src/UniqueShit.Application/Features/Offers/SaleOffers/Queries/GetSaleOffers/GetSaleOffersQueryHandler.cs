@@ -9,29 +9,24 @@ using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
 using UniqueShit.Domain.Offers.Enumerations;
 
-namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
+namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffers
 {
-    public sealed class GetOffersQueryHandler : IQueryHandler<GetOffersQuery, PagedList<GetOffersResponse>>
+    public sealed class GetSaleOffersQueryHandler : IQueryHandler<GetSaleOffersQuery, PagedList<GetSaleOffersResponse>>
     {
         private readonly IDbContext _dbContext;
 
-        public GetOffersQueryHandler(IDbContext dbContext)
+        public GetSaleOffersQueryHandler(IDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<PagedList<GetOffersResponse>> Handle(GetOffersQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<GetSaleOffersResponse>> Handle(GetSaleOffersQuery request, CancellationToken cancellationToken)
         {
-            var offersQuery = _dbContext.Set<Offer>()
+            var offersQuery = _dbContext.Set<SaleOffer>()
                 .AsNoTracking()
                 .Where(x => x.OfferStateId == OfferState.Active.Id)
                 .AsQueryable();
 
-            if (request.OfferTypeId.HasValue)
-            {
-                offersQuery = offersQuery.Where(x => x.OfferTypeId == request.OfferTypeId.Value);
-            }
-                 
             if (request.ItemConditionId.HasValue)
             {
                 offersQuery = offersQuery.Where(x => x.ItemConditionId == request.ItemConditionId.Value);
@@ -59,12 +54,12 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
                 offersQuery = offersQuery
                     .Where(x => x.ModelId == request.ModelId.Value);
             }
-            
+
             offersQuery = ApplyPriceRangeFilter(offersQuery, request);
 
             var offers = await offersQuery
                 .OrderByDescending(x => x.CreatedOnUtc)
-                .Select(x => new GetOffersResponse
+                .Select(x => new GetSaleOffersResponse
                 {
                     Id = x.Id,
                     Topic = x.Topic.Value,
@@ -73,14 +68,13 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
                     Price = new MoneyResponse(x.Price.Amount, x.Price.Currency),
                     ItemCondition = new EnumerationResponse(x.ItemConditionId, ItemCondition.FromValue(x.ItemConditionId).Value.Name),
                     Quantity = x.Quantity,
-                    OfferType = new EnumerationResponse(x.OfferTypeId, OfferType.FromValue(x.OfferTypeId).Value.Name),
                 })
                 .PaginateAsync(request.PageNumber, request.PageSize, cancellationToken);
 
             return offers;
         }
 
-        private IQueryable<Offer> ApplyPriceRangeFilter(IQueryable<Offer> offersQuery, GetOffersQuery request)
+        private IQueryable<SaleOffer> ApplyPriceRangeFilter(IQueryable<SaleOffer> offersQuery, GetSaleOffersQuery request)
         {
             if (request.MinimalPrice.HasValue)
             {

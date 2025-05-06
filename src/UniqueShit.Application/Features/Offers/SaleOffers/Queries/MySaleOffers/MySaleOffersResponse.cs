@@ -1,9 +1,9 @@
 ﻿using UniqueShit.Application.Core.Responses;
 using UniqueShit.Application.Features.Offers.Contracts.Responses;
 
-namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
+namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.MySaleOffers
 {
-    public sealed class GetOffersResponse
+    public sealed class MySaleOffersResponse
     {
         public required int Id { get; set; }
 
@@ -18,7 +18,5 @@ namespace UniqueShit.Application.Features.Offers.Queries.GetOffers
         public required EnumerationResponse ItemCondition { get; set; }
 
         public required int Quantity { get; set; }
-
-        public required EnumerationResponse OfferType { get; set; }
     }
 }

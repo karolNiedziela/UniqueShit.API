@@ -12,9 +12,9 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations
 
             builder.Property(x => x.CreatedOnUtc).IsRequired();
 
-            builder.HasOne(x => x.Offer)
+            builder.HasOne(x => x.SaleOffer)
                 .WithMany()
-                .HasForeignKey(x => x.OfferId);
+                .HasForeignKey(x => x.SaleOfferId);
 
             builder.HasOne(x => x.AppUser)
                 .WithMany()

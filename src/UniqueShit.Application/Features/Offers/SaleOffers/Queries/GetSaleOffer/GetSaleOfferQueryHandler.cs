@@ -7,22 +7,22 @@ using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers;
 using UniqueShit.Domain.Offers.Enumerations;
 
-namespace UniqueShit.Application.Features.Offers.Queries.GetOffer
+namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffer
 {
-    public sealed class GetOfferQueryHandler : IQueryHandler<GetOfferQuery, GetOfferResponse?>
+    public sealed class GetSaleOfferQueryHandler : IQueryHandler<GetSaleOfferQuery, GetSaleOfferResponse?>
     {
         private readonly IDbContext _dbContext;
 
-        public GetOfferQueryHandler(IDbContext dbContext)
+        public GetSaleOfferQueryHandler(IDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<GetOfferResponse?> Handle(GetOfferQuery request, CancellationToken cancellationToken)
+        public async Task<GetSaleOfferResponse?> Handle(GetSaleOfferQuery request, CancellationToken cancellationToken)
         {
-            var offer = await _dbContext.Set<Offer>()
+            var offer = await _dbContext.Set<SaleOffer>()
                 .AsNoTracking()
-                .Select(x => new GetOfferResponse
+                .Select(x => new GetSaleOfferResponse
                 {
                     Id = x.Id,
                     Topic = x.Topic.Value,

@@ -25,7 +25,7 @@ namespace UniqueShit.Infrastructure.Persistence
 
             services.AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<UniqueShitDbContext>());
 
-            services.AddScoped<IOfferRepository, OfferRepository>();
+            services.AddScoped<ISaleOfferRepository, SaleOfferRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<ISizeRepository, SizeRepository>();
             services.AddScoped<IBrandRepository, ManufacturerRepository>();

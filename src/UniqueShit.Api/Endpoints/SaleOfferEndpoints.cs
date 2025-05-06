@@ -3,53 +3,53 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UniqueShit.Application.Core.Queries;
-using UniqueShit.Application.Features.Offers.Commands.CreateOffer;
-using UniqueShit.Application.Features.Offers.Commands.DeleteOffer;
-using UniqueShit.Application.Features.Offers.Queries.GetOffer;
-using UniqueShit.Application.Features.Offers.Queries.GetOffers;
-using UniqueShit.Application.Features.Offers.Queries.MyOffers;
+using UniqueShit.Application.Features.Offers.SaleOffers.Commands.CreateSaleOffer;
+using UniqueShit.Application.Features.Offers.SaleOffers.Commands.DeleteSaleOffer;
+using UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffer;
+using UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffers;
+using UniqueShit.Application.Features.Offers.SaleOffers.Queries.MySaleOffers;
 using UniqueShit.Domain.Core.Primitives;
 
 namespace UniqueShit.Api.Endpoints
 {
-    internal sealed class OfferEndpoints : IMinimalApiEndpointDefinition
+    internal sealed class SaleOfferEndpoints : IMinimalApiEndpointDefinition
     {
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder builder)
         {
-            var group = builder.MapGroup("offers");
+            var group = builder.MapGroup("sale-offers");
 
-            group.MapGet("{offerId:int}", GetOffer)
-                .WithName(nameof(GetOffer))
+            group.MapGet("{offerId:int}", GetSaleOffer)
+                .WithName(nameof(GetSaleOffer))
                 .WithMetadata(
-                 new SwaggerOperationAttribute(summary: "Get offer"),
+                 new SwaggerOperationAttribute(summary: "Get sale offer"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK),
                  new ProducesResponseTypeAttribute(StatusCodes.Status404NotFound));
 
-            group.MapGet("", GetOffers)
-                .WithName(nameof(GetOffers))
+            group.MapGet("", GetSaleOffers)
+                .WithName(nameof(GetSaleOffers))
                 .WithMetadata(
-                 new SwaggerOperationAttribute(summary: "Get offers"),
+                 new SwaggerOperationAttribute(summary: "Get sale offers"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
-            group.MapGet("my", GetMyOffers)
-                .WithName(nameof(GetMyOffers))
+            group.MapGet("my", GetMySaleOffers)
+                .WithName(nameof(GetMySaleOffers))
                 .WithMetadata(
-                 new SwaggerOperationAttribute(summary: "Get my offers"),
+                 new SwaggerOperationAttribute(summary: "Get my sale offers"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK))
                 .RequireAuthorization();
 
-            group.MapPost("", CreateOffer)
-                .WithName(nameof(CreateOffer))
+            group.MapPost("", CreateSaleOffer)
+                .WithName(nameof(CreateSaleOffer))
                 .WithMetadata(
-                    new SwaggerOperationAttribute(summary: "Add offer"),
+                    new SwaggerOperationAttribute(summary: "Add sale offer"),
                     new ProducesResponseTypeAttribute(StatusCodes.Status201Created),
                     new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest))
                 .RequireAuthorization();
 
-            group.MapDelete("{offerId:int}", DeleteOffer)
-                .WithName(nameof(DeleteOffer))
+            group.MapDelete("{offerId:int}", DeleteSaleOffer)
+                .WithName(nameof(DeleteSaleOffer))
                 .WithMetadata(
-                 new SwaggerOperationAttribute(summary: "Delete offer"),
+                 new SwaggerOperationAttribute(summary: "Delete sale offer"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status204NoContent),
                  new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest),
                  new ProducesResponseTypeAttribute(StatusCodes.Status403Forbidden))
@@ -58,9 +58,9 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Results<Ok<GetOfferResponse>, NotFound>> GetOffer(int offerId, ISender sender, HttpContext context)
+        public static async Task<Results<Ok<GetSaleOfferResponse>, NotFound>> GetSaleOffer(int offerId, ISender sender, HttpContext context)
         {
-            var offer = await sender.Send(new GetOfferQuery(offerId));
+            var offer = await sender.Send(new GetSaleOfferQuery(offerId));
             if (offer is null)
             {
                 return TypedResults.NotFound();
@@ -69,8 +69,8 @@ namespace UniqueShit.Api.Endpoints
             return TypedResults.Ok(offer);
         }
 
-        public static async Task<Ok<PagedList<GetOffersResponse>>> GetOffers(
-         [AsParameters] GetOffersQuery query,
+        public static async Task<Ok<PagedList<GetSaleOffersResponse>>> GetSaleOffers(
+         [AsParameters] GetSaleOffersQuery query,
          ISender sender)
         {
             var offers = await sender.Send(query);
@@ -78,16 +78,16 @@ namespace UniqueShit.Api.Endpoints
             return TypedResults.Ok(offers);
         }
 
-        public static async Task<Ok<PagedList<MyOffersResponse>>> GetMyOffers(
+        public static async Task<Ok<PagedList<MySaleOffersResponse>>> GetMySaleOffers(
          ISender sender)
         {
-            var myOffers = await sender.Send(new MyOffersQuery());
+            var myOffers = await sender.Send(new MySaleOffersQuery());
 
             return TypedResults.Ok(myOffers);
         }
 
-        public static async Task<Results<Created, BadRequest<List<Error>>>> CreateOffer(
-            CreateOfferCommand command,
+        public static async Task<Results<Created, BadRequest<List<Error>>>> CreateSaleOffer(
+            CreateSaleOfferCommand command,
             ISender sender,
             LinkGenerator linkGenerator,
             HttpContext context)
@@ -98,7 +98,7 @@ namespace UniqueShit.Api.Endpoints
                  onSuccess: (int offerId) =>
                  {
                      var offerLink = linkGenerator.GetUriByName(context,
-                           endpointName: nameof(GetOffer),
+                           endpointName: nameof(GetSaleOffer),
                            values: new { offerId = result.Value }
                            );
 
@@ -107,11 +107,11 @@ namespace UniqueShit.Api.Endpoints
                 onError: (List<Error> errors) => TypedResults.BadRequest(errors));
         }
 
-        public static async Task<Results<NoContent, BadRequest<List<Error>>, ForbidHttpResult>> DeleteOffer(
+        public static async Task<Results<NoContent, BadRequest<List<Error>>, ForbidHttpResult>> DeleteSaleOffer(
             int offerId,
             ISender sender)
         {
-            var result = await sender.Send(new DeleteOfferCommand(offerId));
+            var result = await sender.Send(new DeleteSaleOfferCommand(offerId));
 
             if (result.IsSuccess)
             {
