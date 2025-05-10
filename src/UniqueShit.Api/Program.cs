@@ -5,6 +5,7 @@ using Microsoft.Net.Http.Headers;
 using UniqueShit.Api;
 using UniqueShit.Application;
 using UniqueShit.Infrastructure;
+using UniqueShit.Infrastructure.Authentication.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(options =>
             {
-                configuration.Bind("AzureAdB2C", options);
+                configuration.Bind(AzureB2COptions.SectionName, options);
 
                 options.Events = new JwtBearerEvents
                 {
@@ -58,7 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         return Task.CompletedTask;
                     }
                 };
-            }, options => { configuration.Bind("AzureAdB2C", options); });
+            }, options => { configuration.Bind(AzureB2COptions.SectionName, options); });
 
 builder.Services.AddHttpContextAccessor();
 

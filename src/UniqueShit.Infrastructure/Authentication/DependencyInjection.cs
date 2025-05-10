@@ -13,6 +13,10 @@ namespace UniqueShit.Infrastructure.Authentication
 
             services.AddScoped<IUserIdentifierProvider, UserIdentifierProvider>();
 
+            services.Configure<AzureB2COptions>(
+             configuration.GetSection(AzureB2COptions.SectionName));
+
+
             return services;
         }
     }

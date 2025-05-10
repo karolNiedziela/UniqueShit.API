@@ -534,7 +534,7 @@
             Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ServiceUrl">
-              https://ebc5-2a01-118f-4103-2000-801-2124-5bd0-8bc4.ngrok-free.app/api/v1/app-users</Item>
+             https://c75e-2a01-118f-4103-2000-563-382-cae2-2106.ngrok-free.app/api/v1/app-users</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
