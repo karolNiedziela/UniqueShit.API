@@ -533,10 +533,15 @@
           <Protocol Name="Proprietary"
             Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://c75e-2a01-118f-4103-2000-563-382-cae2-2106.ngrok-free.app/api/v1/app-users</Item>
+            <Item Key="ServiceUrl">
+              https://sawfly-assuring-mistakenly.ngrok-free.app/api/v1/app-users</Item>
             <Item Key="AuthenticationType">ApiKeyHeader</Item>
             <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">false</Item>
           </Metadata>
+          <CryptographicKeys>
+            <Key Id="x-functions-key" StorageReferenceId="B2C_1A_RestApiHeaderKey" />
+          </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="email" />
             <InputClaim ClaimTypeReferenceId="displayName" />
