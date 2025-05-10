@@ -44,13 +44,13 @@ namespace UniqueShit.Application.Features.Offers.SaleOffers.Commands.CreateSaleO
             var model = await _modelRepository.GetAsync(request.ModelId);
             if (model is null)
             {
-                return DomainErrors.Offer.ModelNotFound;
+                return DomainErrors.SaleOffer.ModelNotFound;
             }
 
             var size = await _sizeRepository.GetAsync(request.SizeId, model.ProductCategoryId);
             if (size is null)
             {
-                return DomainErrors.Offer.SizeNotFound;
+                return DomainErrors.SaleOffer.SizeNotFound;
             }
 
             var saleOffer = CreateSaleOffer(request, model.Id, size.Id);

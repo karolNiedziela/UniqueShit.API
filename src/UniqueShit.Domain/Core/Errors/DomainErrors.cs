@@ -1,4 +1,5 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
+using UniqueShit.Domain.Offers;
 
 namespace UniqueShit.Domain.Core.Errors
 {
@@ -27,15 +28,20 @@ namespace UniqueShit.Domain.Core.Errors
             public static Error InvalidCurrency => new("Money.InvalidCurrency", "This currency is not supported.");
         }
 
-        public static class Offer
+        public static class SaleOffer
         {
-            public static Error SizeNotFound => new("Offer.SizeNotFound", "Size with the specified identifier was not found.");
+            public static Error SizeNotFound => new("SaleOffer.SizeNotFound", "Size with the specified identifier was not found.");
 
-            public static Error ModelNotFound => new("Offer.ModelNotFound", "Model with the specified identifier was not found.");
+            public static Error ModelNotFound => new("SaleOffer.ModelNotFound", "Model with the specified identifier was not found.");
 
-            public static Error OfferNotFound => new("Offer.OfferNotFound", "Offer with the specified identifier was not found.");
+            public static Error SaleOfferNotFound => new("OfSaleOfferfer.OfferNotFound", "Sale offer with the specified identifier was not found.");
 
-            public static Error NoPrivilegesToRemove => new("Offer.NoPrivilegesToRemove", "You have no privileges to remove this offer.", ErrorType.Forbidden);
+            public static Error NoPrivilegesToRemove => new("SaleOffer.NoPrivilegesToRemove", "You have no privileges to remove this offer.", ErrorType.Forbidden);
+        }
+
+        public static class PurchaseOffer
+        {
+            public static Error ModelNotFound => new("PurchaseOffer.ModelNotFound", "Model with the specified identifier was not found.");
         }
 
         public static class Model

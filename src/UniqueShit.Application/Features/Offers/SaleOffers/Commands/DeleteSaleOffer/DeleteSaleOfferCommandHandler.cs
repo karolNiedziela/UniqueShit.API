@@ -31,12 +31,12 @@ namespace UniqueShit.Application.Features.Offers.SaleOffers.Commands.DeleteSaleO
                 .FirstOrDefaultAsync(cancellationToken);
             if (offer is null)
             {
-                return DomainErrors.Offer.OfferNotFound;
+                return DomainErrors.SaleOffer.SaleOfferNotFound;
             }
 
             if (offer.AppUserId != _userIdentifierProvider.UserId)
             {
-                return DomainErrors.Offer.NoPrivilegesToRemove;
+                return DomainErrors.SaleOffer.NoPrivilegesToRemove;
             }
 
             await _dbContext

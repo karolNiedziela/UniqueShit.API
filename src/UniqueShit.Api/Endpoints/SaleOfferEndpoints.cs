@@ -18,7 +18,7 @@ namespace UniqueShit.Api.Endpoints
         {
             var group = builder.MapGroup("sale-offers");
 
-            group.MapGet("{offerId:int}", GetSaleOffer)
+            group.MapGet("{id:int}", GetSaleOffer)
                 .WithName(nameof(GetSaleOffer))
                 .WithMetadata(
                  new SwaggerOperationAttribute(summary: "Get sale offer"),
@@ -46,7 +46,7 @@ namespace UniqueShit.Api.Endpoints
                     new ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest))
                 .RequireAuthorization();
 
-            group.MapDelete("{offerId:int}", DeleteSaleOffer)
+            group.MapDelete("{id:int}", DeleteSaleOffer)
                 .WithName(nameof(DeleteSaleOffer))
                 .WithMetadata(
                  new SwaggerOperationAttribute(summary: "Delete sale offer"),
@@ -58,9 +58,9 @@ namespace UniqueShit.Api.Endpoints
             return builder;
         }
 
-        public static async Task<Results<Ok<GetSaleOfferResponse>, NotFound>> GetSaleOffer(int offerId, ISender sender, HttpContext context)
+        public static async Task<Results<Ok<GetSaleOfferResponse>, NotFound>> GetSaleOffer(int id, ISender sender)
         {
-            var offer = await sender.Send(new GetSaleOfferQuery(offerId));
+            var offer = await sender.Send(new GetSaleOfferQuery(id));
             if (offer is null)
             {
                 return TypedResults.NotFound();
@@ -95,11 +95,11 @@ namespace UniqueShit.Api.Endpoints
             var result = await sender.Send(command);
 
             return result.Match<Results<Created, BadRequest<List<Error>>>>(
-                 onSuccess: (int offerId) =>
+                 onSuccess: (int saleOfferId) =>
                  {
                      var offerLink = linkGenerator.GetUriByName(context,
                            endpointName: nameof(GetSaleOffer),
-                           values: new { offerId = result.Value }
+                           values: new { id = result.Value }
                            );
 
                      return TypedResults.Created(new Uri(offerLink!));
@@ -108,10 +108,10 @@ namespace UniqueShit.Api.Endpoints
         }
 
         public static async Task<Results<NoContent, BadRequest<List<Error>>, ForbidHttpResult>> DeleteSaleOffer(
-            int offerId,
+            int id,
             ISender sender)
         {
-            var result = await sender.Send(new DeleteSaleOfferCommand(offerId));
+            var result = await sender.Send(new DeleteSaleOfferCommand(id));
 
             if (result.IsSuccess)
             {
