@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using UniqueShit.Application.Core.Queries;
 using UniqueShit.Application.Features.Offers.PurchaseOffers.CreatePurchaseOffer;
 using UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurchaseOffer;
+using UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurchaseOffers;
+using UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffers;
 using UniqueShit.Domain.Core.Primitives;
 
 namespace UniqueShit.Api.Endpoints
@@ -20,6 +23,12 @@ namespace UniqueShit.Api.Endpoints
                  new SwaggerOperationAttribute(summary: "Get sale offer"),
                  new ProducesResponseTypeAttribute(StatusCodes.Status200OK),
                  new ProducesResponseTypeAttribute(StatusCodes.Status404NotFound));
+
+            group.MapGet("", GetPurchaseOffers)
+               .WithName(nameof(GetPurchaseOffers))
+               .WithMetadata(
+                new SwaggerOperationAttribute(summary: "Get purchase offers"),
+                new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
 
             group.MapPost("", CreatePurchaseOffer)
                 .WithName(nameof(CreatePurchaseOffer))
@@ -41,6 +50,15 @@ namespace UniqueShit.Api.Endpoints
             }
 
             return TypedResults.Ok(purchaseOffer);
+        }
+
+        public static async Task<Ok<PagedList<GetPurchaseOffersResponse>>> GetPurchaseOffers(
+            [AsParameters] GetPurchaseOffersQuery query,
+            ISender sender)
+        {
+            var offers = await sender.Send(query);
+
+            return TypedResults.Ok(offers);
         }
 
         public static async Task<Results<Created, BadRequest<List<Error>>>> CreatePurchaseOffer(
