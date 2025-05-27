@@ -3,6 +3,7 @@ using UniqueShit.Application.Core.Extensions;
 using UniqueShit.Application.Core.Messaging;
 using UniqueShit.Application.Core.Persistence;
 using UniqueShit.Application.Core.Queries;
+using UniqueShit.Application.Core.Responses;
 using UniqueShit.Application.Features.Offers.Contracts.Responses;
 using UniqueShit.Domain.Offers;
 using UniqueShit.Domain.Offers.Enumerations;
@@ -50,7 +51,8 @@ namespace UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurch
                    x.Topic.Value,
                    x.Description.Value,
                    new BrandResponse(x.Model.Brand.Id, x.Model.Brand.Name),
-                   new ModelResponse(x.Model.Id, x.Model.Name))
+                   new ModelResponse(x.Model.Id, x.Model.Name),
+                   new UserResponse(x.AppUserId, x.AppUser.DisplayName))
                )
                .PaginateAsync(request.PageNumber, request.PageSize, cancellationToken);
 

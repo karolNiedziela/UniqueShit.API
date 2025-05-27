@@ -1,4 +1,5 @@
-﻿using UniqueShit.Application.Features.Offers.Contracts.Responses;
+﻿using UniqueShit.Application.Core.Responses;
+using UniqueShit.Application.Features.Offers.Contracts.Responses;
 
 namespace UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurchaseOffers
 {
@@ -7,5 +8,6 @@ namespace UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurch
         string Topic,
         string Description,
         BrandResponse Brand,
-        ModelResponse Model);
+        ModelResponse Model,
+        UserResponse User);
 }
