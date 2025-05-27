@@ -6,6 +6,8 @@ namespace UniqueShit.Domain.Repositories
     {
         Task<AppUser?> GetByEmailAsync(string email);
 
+        Task<AppUser?> GetById(Guid id);
+
         void Add(AppUser appUser);
     }
 }

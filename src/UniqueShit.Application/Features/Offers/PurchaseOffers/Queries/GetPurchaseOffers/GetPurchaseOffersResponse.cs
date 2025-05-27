@@ -5,6 +5,7 @@ namespace UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurch
     public sealed record GetPurchaseOffersResponse(
         int Id,
         string Topic,
+        string Description,
         BrandResponse Brand,
         ModelResponse Model);
 }

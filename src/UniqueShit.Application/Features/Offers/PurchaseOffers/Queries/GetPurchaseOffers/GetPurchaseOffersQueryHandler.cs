@@ -48,6 +48,7 @@ namespace UniqueShit.Application.Features.Offers.PurchaseOffers.Queries.GetPurch
                .Select(x => new GetPurchaseOffersResponse(
                    x.Id,
                    x.Topic.Value,
+                   x.Description.Value,
                    new BrandResponse(x.Model.Brand.Id, x.Model.Brand.Name),
                    new ModelResponse(x.Model.Id, x.Model.Name))
                )

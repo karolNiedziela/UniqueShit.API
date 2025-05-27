@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniqueShit.Domain\UniqueShit.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -17,7 +17,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -35,6 +35,59 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.HasIndex("SaleOfferId");
 
                     b.ToTable("SaleOfferColour");
+                });
+
+            modelBuilder.Entity("UniqueShit.Chatting.ChatMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PrivateChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("SentAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrivateChatId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("ChatMessage");
+                });
+
+            modelBuilder.Entity("UniqueShit.Domain.Chatting.PrivateChat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("User1Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("User2Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User1Id");
+
+                    b.HasIndex("User2Id");
+
+                    b.ToTable("PrivateChat");
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.AppUser", b =>
@@ -446,8 +499,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ExpiredAtUtc")
-                        .IsRequired()
+                    b.Property<DateTime>("ExpiredAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ModelId")
@@ -484,8 +536,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.Property<int>("DeliveryTypeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ExpiredAtUtc")
-                        .IsRequired()
+                    b.Property<DateTime>("ExpiredAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ItemConditionId")
@@ -538,6 +589,44 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .HasForeignKey("SaleOfferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("UniqueShit.Chatting.ChatMessage", b =>
+                {
+                    b.HasOne("UniqueShit.Domain.Chatting.PrivateChat", "PrivateChat")
+                        .WithMany("Messages")
+                        .HasForeignKey("PrivateChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniqueShit.Domain.Enitities.AppUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PrivateChat");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("UniqueShit.Domain.Chatting.PrivateChat", b =>
+                {
+                    b.HasOne("UniqueShit.Domain.Enitities.AppUser", "User1")
+                        .WithMany()
+                        .HasForeignKey("User1Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("UniqueShit.Domain.Enitities.AppUser", "User2")
+                        .WithMany()
+                        .HasForeignKey("User2Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User1");
+
+                    b.Navigation("User2");
                 });
 
             modelBuilder.Entity("UniqueShit.Domain.Enitities.Model", b =>
@@ -698,7 +787,7 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("UniqueShit.Domain.Enitities.Size", null)
+                    b.HasOne("UniqueShit.Domain.Enitities.Size", "Size")
                         .WithMany()
                         .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -775,8 +864,15 @@ namespace UniqueShit.Infrastructure.Persistence.Migrations
                     b.Navigation("Price")
                         .IsRequired();
 
+                    b.Navigation("Size");
+
                     b.Navigation("Topic")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("UniqueShit.Domain.Chatting.PrivateChat", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }
