@@ -1,4 +1,5 @@
-﻿using UniqueShit.Domain.Enumerations;
+﻿using UniqueShit.Domain.Enitities;
+using UniqueShit.Domain.Enumerations;
 using UniqueShit.Domain.Offers.ValueObjects;
 
 namespace UniqueShit.Domain.Offers
@@ -10,6 +11,8 @@ namespace UniqueShit.Domain.Offers
         public int ItemConditionId { get; private set; }
 
         public int SizeId { get; private set; }
+
+        public Size Size { get; private set; } = default!;
 
         public int DeliveryTypeId { get; private set; } = default!;
 

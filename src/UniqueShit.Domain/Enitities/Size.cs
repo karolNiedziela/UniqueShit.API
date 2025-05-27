@@ -1,5 +1,4 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
-using UniqueShit.Domain.Enumerations;
 
 namespace UniqueShit.Domain.Enitities
 {

@@ -31,7 +31,7 @@ namespace UniqueShit.Infrastructure.Persistence.Configurations.Offers
               .HasForeignKey(x => x.ItemConditionId)
               .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne<Size>()
+            builder.HasOne(x => x.Size)
                 .WithMany()
                 .HasForeignKey(x => x.SizeId)
                 .OnDelete(DeleteBehavior.NoAction);

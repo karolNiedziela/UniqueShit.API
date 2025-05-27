@@ -1,11 +1,15 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Identity.Web;
 using Microsoft.Net.Http.Headers;
 using UniqueShit.Api;
 using UniqueShit.Application;
+using UniqueShit.Chatting.SignalRProviders;
 using UniqueShit.Infrastructure;
 using UniqueShit.Infrastructure.Authentication.Options;
+using UniqueShit.Infrastructure.Realtime.Hubs;
+using Z.BulkOperations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +22,9 @@ var configuration = new ConfigurationBuilder()
   .Build();
 
 builder.Services.AddSingleton(TimeProvider.System);
+
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
 builder.Services.AddCors(options =>
 {
@@ -41,7 +48,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 options.Events = new JwtBearerEvents
                 {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken)
+                              && path.StartsWithSegments("/chatHub", StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Token = accessToken;
+                        }
 
+                        return Task.CompletedTask;
+                    },
                     OnTokenValidated = context =>
                     {
                         return Task.CompletedTask;
@@ -107,6 +125,9 @@ var versionedGroup = app
     .MapGroup("api/v{apiVersion:apiVersion}")
     .WithApiVersionSet(apiVersionSet);
 
+
 versionedGroup.MapEndpoints();
+ 
+app.MapHub<ChatHub>("/chatHub");
 
 await app.RunAsync();

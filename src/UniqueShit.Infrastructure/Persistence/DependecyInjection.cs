@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UniqueShit.Application.Core.Persistence;
+using UniqueShit.Domain.Chatting.Repositories;
 using UniqueShit.Domain.Repositories;
 using UniqueShit.Infrastructure.Persistence.Options;
 using UniqueShit.Infrastructure.Persistence.Repositories;
@@ -32,6 +33,8 @@ namespace UniqueShit.Infrastructure.Persistence
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<IFavouriteOfferRepository, FavouriteOfferRepository>();
             services.AddScoped<IPurchaseOfferRepository, PurchaseOfferRepository>();
+            services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+            services.AddScoped<IPrivateChatRepository, PrivateChatRepository>();
 
 
             services.AddHostedService<MigratorHostedService>();

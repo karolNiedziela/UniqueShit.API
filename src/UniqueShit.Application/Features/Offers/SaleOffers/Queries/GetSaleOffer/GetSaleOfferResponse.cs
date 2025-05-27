@@ -17,10 +17,15 @@ namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffer
 
         public required EnumerationResponse ItemCondition { get; set; }
 
+        public required SizeResponse Size { get; set; }
+
         public required EnumerationResponse PaymentType { get; set; }
 
         public required EnumerationResponse DeliveryType { get; set; }
 
+
         public required int Quantity { get; set; }
+
+        public required UserResponse User { get; set; }
     }
 }

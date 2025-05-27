@@ -17,6 +17,9 @@ namespace UniqueShit.Infrastructure.Persistence.Repositories
         public async Task<AppUser?> GetByEmailAsync(string email)
             => await _users.FirstOrDefaultAsync(x => x.Email == email);
 
+        public async Task<AppUser?> GetById(Guid id)
+            => await _users.FirstOrDefaultAsync(x => x.ADObjectId == id);
+
         public void Add(AppUser appUser)
            => _users.Add(appUser);
     }

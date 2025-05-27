@@ -67,7 +67,7 @@ namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffer
                     Model = new ModelResponse(x.Model.Id, x.Model.Name),
                     Price = new MoneyResponse(x.Price.Amount, x.Price.Currency),
                     ItemCondition = new EnumerationResponse(x.ItemConditionId, ItemCondition.FromValue(x.ItemConditionId).Value.Name),
-                    Quantity = x.Quantity,
+                    Quantity = x.Quantity
                 })
                 .PaginateAsync(request.PageNumber, request.PageSize, cancellationToken);
 
