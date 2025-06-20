@@ -55,6 +55,12 @@ namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffer
                     .Where(x => x.ModelId == request.ModelId.Value);
             }
 
+            if (request.UserId.HasValue)
+            {
+                offersQuery = offersQuery
+                    .Where(x => x.AppUserId == request.UserId.Value);
+            }
+
             offersQuery = ApplyPriceRangeFilter(offersQuery, request);
 
             var offers = await offersQuery

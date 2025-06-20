@@ -22,5 +22,8 @@ namespace UniqueShit.Infrastructure.Persistence.Repositories
 
         public void Add(AppUser appUser)
            => _users.Add(appUser);
+
+        public void Update(AppUser appUser)
+            => _users.Update(appUser);
     }
 }

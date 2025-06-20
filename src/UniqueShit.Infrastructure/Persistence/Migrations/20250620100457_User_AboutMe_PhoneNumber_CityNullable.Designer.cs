@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniqueShit.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using UniqueShit.Infrastructure.Persistence;
 namespace UniqueShit.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(UniqueShitDbContext))]
-    partial class UniqueShitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250620100457_User_AboutMe_PhoneNumber_CityNullable")]
+    partial class User_AboutMe_PhoneNumber_CityNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

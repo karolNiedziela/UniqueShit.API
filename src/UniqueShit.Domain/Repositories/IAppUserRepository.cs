@@ -9,5 +9,7 @@ namespace UniqueShit.Domain.Repositories
         Task<AppUser?> GetById(Guid id);
 
         void Add(AppUser appUser);
+
+        void Update(AppUser appUser);
     }
 }

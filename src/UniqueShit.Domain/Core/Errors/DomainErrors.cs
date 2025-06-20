@@ -28,6 +28,20 @@ namespace UniqueShit.Domain.Core.Errors
             public static Error InvalidCurrency => new("Money.InvalidCurrency", "This currency is not supported.");
         }
 
+        public static class PhoneNumber
+        {
+            public static Error NullOrEmpty => new("PhoneNumber.NullOrEmpty", "Phone number cannot be null or empty.");
+
+            public static Error LongerThanAllowed => new("PhoneNumber.LongerThanAllowed", "Phone number is longer than allowed.");
+
+            public static Error InvalidFormat => new("PhoneNumber.InvalidFormat", "Phone number format is invalid.");
+        }
+
+        public static class AppUser
+        {
+            public static Error AppUserNotFound => new ("AppUser.NotFound", "User with the specified identifier was not found.");
+        }
+
         public static class SaleOffer
         {
             public static Error SizeNotFound => new("SaleOffer.SizeNotFound", "Size with the specified identifier was not found.");

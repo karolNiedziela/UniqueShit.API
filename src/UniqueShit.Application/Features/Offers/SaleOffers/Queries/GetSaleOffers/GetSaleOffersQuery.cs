@@ -13,5 +13,6 @@ namespace UniqueShit.Application.Features.Offers.SaleOffers.Queries.GetSaleOffer
         [FromQuery(Name = "mid")] int? ModelId = null,
         [FromQuery(Name = "sid")] int? SizeId = null,
         [FromQuery(Name = "bid")] int? BrandId = null,
+        [FromQuery(Name = "uid")] Guid? UserId = null,
         [FromQuery(Name = "pcid")] int? ProductCategoryId = null) : IQuery<PagedList<GetSaleOffersResponse>>;
 }

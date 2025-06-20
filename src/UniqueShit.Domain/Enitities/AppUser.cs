@@ -1,4 +1,5 @@
 ﻿using UniqueShit.Domain.Core.Primitives;
+using UniqueShit.Domain.ValueObjects;
 
 namespace UniqueShit.Domain.Enitities
 {
@@ -8,18 +9,28 @@ namespace UniqueShit.Domain.Enitities
 
         public string Email { get; private set; } = default!;
 
-        public string City { get; private set; } = default!;
+        public string? City { get; private set; } = default!;
+
+        public PhoneNumber? PhoneNumber { get; private set; } = default!;
+
+        public string? AboutMe { get; private set; } = default!;
 
         public Guid ADObjectId { get; private set; }
 
         private AppUser() { }
 
-        public AppUser(string displayName, string email, string city, Guid adObjectId)
+        public AppUser(string displayName, string email, Guid adObjectId)
         {
             DisplayName = displayName;            
             Email = email;
-            City = city;
             ADObjectId = adObjectId;
+        }
+
+        public void Update(PhoneNumber? phoneNumber, string? aboutMe, string? city)
+        {
+            PhoneNumber = phoneNumber;
+            AboutMe = aboutMe;
+            City = city;
         }
     }
 }

@@ -4,7 +4,7 @@ using UniqueShit.Domain.Core.Primitives.Results;
 using UniqueShit.Domain.Enitities;
 using UniqueShit.Domain.Repositories;
 
-namespace UniqueShit.Application.Features.AppUsers.Commands
+namespace UniqueShit.Application.Features.AppUsers.Commands.CreateAppUser
 {
     public sealed class CreateAppUserCommandHandler : ICommandHandler<CreateAppUserCommand, Result>
     {
@@ -25,7 +25,7 @@ namespace UniqueShit.Application.Features.AppUsers.Commands
                 return Result.Success();
             }
 
-            var appUser = new AppUser(request.DisplayName, request.Email, "Lublin", request.ObjectId);
+            var appUser = new AppUser(request.DisplayName, request.Email, request.ObjectId);
             _appUserRepository.Add(appUser);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
